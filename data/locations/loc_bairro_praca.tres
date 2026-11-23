@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="LocationData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/location_data.gd" id="1_uc0mg"]
+
+[resource]
+script = ExtResource("1_uc0mg")
+id = &"loc_bairro_praca"
+display_name = "Bairro e Praca Central"
+scene_path = "res://scenes/maps/BairroPraca.tscn"
+region_id = &"reg_bairro_central"
+is_interior = false
+default_period_lighting = true
