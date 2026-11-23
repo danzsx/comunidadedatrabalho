@@ -83,8 +83,8 @@ func test_full_world_state_save_load_roundtrip() -> void:
 
 
 func test_all_character_sprites_and_portraits_exist() -> void:
-	assert_true(ResourceLoader.exists("res://assets/characters/alex_greybox.png"))
+	assert_true(ResourceLoader.exists("res://assets/characters/sheets/alex_sheet.png"))
 	assert_true(ResourceLoader.exists("res://assets/characters/portraits/alex.png"))
 	for char_id: StringName in DataRegistry.get_all_character_ids():
-		assert_true(ResourceLoader.exists("res://assets/characters/%s.png" % String(char_id)), "Missing sprite for " + String(char_id))
+		assert_true(ResourceLoader.exists("res://assets/characters/sheets/%s_sheet.png" % String(char_id)), "Missing anim sheet for " + String(char_id))
 		assert_true(ResourceLoader.exists("res://assets/characters/portraits/%s.png" % String(char_id)), "Missing portrait for " + String(char_id))

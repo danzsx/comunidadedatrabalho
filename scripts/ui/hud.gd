@@ -1,7 +1,8 @@
 class_name GameHUD
 extends CanvasLayer
-## Minimal HUD showing Day/Weekday, current Period, Location name, and event notifications.
+## Ornate Graveyard Keeper 2-inspired HUD with circular TimeDial, framed Location Banner, and notifications.
 
+@onready var time_dial: TimeDial = $Root/TimeDial
 @onready var time_label: Label = $Root/TopLeftPanel/Margin/TimeLabel
 @onready var location_label: Label = $Root/TopRightPanel/Margin/LocationLabel
 @onready var toast_panel: PanelContainer = $Root/ToastPanel
@@ -30,6 +31,8 @@ func _ready() -> void:
 func refresh() -> void:
 	var weekday: String = TimeSystem.get_weekday_name(WorldState.day)
 	var period_name: String = TimeSystem.get_period_name(WorldState.period)
+	if time_dial != null:
+		time_dial.set_time(WorldState.day, WorldState.period)
 	time_label.text = "Dia %d (%s) · %s" % [WorldState.day, weekday, period_name]
 
 	var loc: LocationData = DataRegistry.get_location(WorldState.current_location_id)
