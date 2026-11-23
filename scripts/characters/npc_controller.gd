@@ -9,15 +9,23 @@ extends CharacterBody2D
 @onready var interactable: Interactable = $Interactable
 
 var _character_data: CharacterData = null
+var _idle_time: float = 0.0
 
 
 func _ready() -> void:
 	add_to_group(&"npcs")
+	_idle_time = float(abs(hash(character_id)) % 100) * 0.06
 	if interactable != null and not interactable.interacted.is_connected(_on_interacted):
 		var err: Error = interactable.interacted.connect(_on_interacted)
 		if err != OK:
 			push_warning("NPCController failed to connect interacted.")
 	apply_character_data()
+
+
+func _process(delta: float) -> void:
+	if sprite != null:
+		_idle_time += delta * 2.4
+		sprite.offset.y = -12.0 + sin(_idle_time) * 0.45
 
 
 func apply_character_data() -> void:
@@ -28,7 +36,14 @@ func apply_character_data() -> void:
 	if _character_data == null:
 		return
 	if sprite != null:
-		sprite.modulate = _character_data.tint_color
+		var custom_path: String = "res://assets/characters/%s.png" % String(character_id)
+		if ResourceLoader.exists(custom_path):
+			var tex: Texture2D = load(custom_path) as Texture2D
+			if tex != null:
+				sprite.texture = tex
+				sprite.modulate = Color.WHITE
+		else:
+			sprite.modulate = _character_data.tint_color
 	if interactable != null:
 		interactable.prompt_text = "Falar com %s" % _character_data.display_name
 

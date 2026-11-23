@@ -34,7 +34,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 12.0
-offset_top = -94.0
+offset_top = -98.0
 offset_right = -12.0
 offset_bottom = -8.0
 grow_horizontal = 2
@@ -48,28 +48,40 @@ theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 6
 
-[node name="VBox" type="VBoxContainer" parent="Root/Panel/Margin"]
+[node name="HBox" type="HBoxContainer" parent="Root/Panel/Margin"]
 layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PortraitRect" type="TextureRect" parent="Root/Panel/Margin/HBox"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBox" type="VBoxContainer" parent="Root/Panel/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
-[node name="SpeakerLabel" type="Label" parent="Root/Panel/Margin/VBox"]
+[node name="SpeakerLabel" type="Label" parent="Root/Panel/Margin/HBox/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.24, 0.16, 0.1, 1)
 theme_override_font_sizes/font_size = 11
-text = "Hortencia"
+text = "Hortência"
 
-[node name="BodyLabel" type="Label" parent="Root/Panel/Margin/VBox"]
+[node name="BodyLabel" type="Label" parent="Root/Panel/Margin/HBox/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.16, 0.14, 0.12, 1)
 theme_override_font_sizes/font_size = 10
 text = "..."
 autowrap_mode = 3
 
-[node name="ChoicesBox" type="VBoxContainer" parent="Root/Panel/Margin/VBox"]
+[node name="ChoicesBox" type="VBoxContainer" parent="Root/Panel/Margin/HBox/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="ContinueHint" type="Label" parent="Root/Panel/Margin/VBox"]
+[node name="ContinueHint" type="Label" parent="Root/Panel/Margin/HBox/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.45, 0.38, 0.3, 1)
 theme_override_font_sizes/font_size = 8

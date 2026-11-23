@@ -6,6 +6,7 @@ extends CharacterBody2D
 
 var _movement_locked: bool = false
 var _facing: Vector2 = Vector2.DOWN
+var _walk_bob: float = 0.0
 
 @onready var sprite: Sprite2D = $Sprite2D
 
@@ -28,9 +29,11 @@ func get_facing() -> Vector2:
 	return _facing
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if _movement_locked:
 		velocity = Vector2.ZERO
+		if sprite != null:
+			sprite.offset.y = -12.0
 		return
 
 	var input_dir: Vector2 = Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
@@ -40,8 +43,14 @@ func _physics_process(_delta: float) -> void:
 	if input_dir != Vector2.ZERO:
 		input_dir = input_dir.normalized()
 		_facing = input_dir
-		if sprite != null and absf(input_dir.x) > 0.1:
-			sprite.flip_h = input_dir.x < 0.0
+		_walk_bob += delta * 12.0
+		if sprite != null:
+			if absf(input_dir.x) > 0.1:
+				sprite.flip_h = input_dir.x < 0.0
+			sprite.offset.y = -12.0 - absf(sin(_walk_bob)) * 1.6
+	elif sprite != null:
+		_walk_bob = 0.0
+		sprite.offset.y = -12.0
 
 	velocity = input_dir * move_speed
 	var _collided: bool = move_and_slide()

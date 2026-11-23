@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="WorldEventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/world_event_data.gd" id="1_evt"]
+
+[resource]
+script = ExtResource("1_evt")
+id = &"evt_day7_symbolic_whisper"
+title = "Brisa antiga na praca"
+can_happen_offscreen = true
+once = true
+min_day = 7
+target_period = 2
+conditions = []
+effects = [{
+"fact_id": "day7_symbolic_hint_seen",
+"type": "set_fact",
+"value": true
+}]
+notification_hint = "A noite na praca traz um silencio incomum — como se o bairro guardasse historias antigas."

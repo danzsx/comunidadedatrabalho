@@ -1,4 +1,13 @@
 ~ start
+if WorldState.day >= 7 and not has_fact("week1_reflection_done"):
+	Hortência: Uma semana inteira já passou desde que você chegou aqui meio sem saber o que esperar, né Alex?
+	Hortência: Vi você circulando pelo bairro, ouvindo gente diferente e tentando encaixar o trabalho com seus estudos.
+	Alex: Ainda não tenho certeza do que quero fazer da vida depois da faculdade, Hortência... mas o bairro não parece mais só um monte de portas fechadas.
+	Hortência: E não precisa ter resposta pronta agora. Conhecer a vida dos outros já é um jeito honesto de ir descobrindo a própria.
+	do set_fact("week1_reflection_done", true)
+	do inc_career("self_reflection", 2)
+	=> END
+
 if get_visit_stage("fam_a") == "ready_to_report":
 	Hortência: Que bom que você voltou da casa da Família Alencar, Alex. Vi no seu olhar que você reparou em bastante coisa lá.
 	Hortência: Como você quer registrar e articular essa situação aqui na equipe da UBS?

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/boot/main.gd" id="1_main_script"]
 [ext_resource type="PackedScene" path="res://scenes/player/Alex.tscn" id="2_alex_scene"]
@@ -7,6 +7,15 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="5_hud_scene"]
 [ext_resource type="PackedScene" path="res://scenes/ui/NotebookUI.tscn" id="6_notebook_ui"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ProjectUI.tscn" id="7_project_ui"]
+[ext_resource type="PackedScene" path="res://scenes/ui/PauseSaveUI.tscn" id="8_pause_ui"]
+[ext_resource type="Script" path="res://scripts/systems/audio_feedback.gd" id="9_audio_feedback"]
+[ext_resource type="Shader" path="res://shaders/lighting_atmosphere.gdshader" id="10_atmo_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_atmo"]
+shader = ExtResource("10_atmo_shader")
+shader_parameter/vignette_strength = 0.22
+shader_parameter/vignette_softness = 0.54
+shader_parameter/tint_color = Color(0.08, 0.05, 0.04, 1)
 
 [node name="Main" type="Node"]
 script = ExtResource("1_main_script")
@@ -18,6 +27,21 @@ script = ExtResource("1_main_script")
 [node name="DialogueService" type="Node" parent="."]
 script = ExtResource("3_dialogue_service")
 
+[node name="AudioFeedback" type="Node" parent="."]
+script = ExtResource("9_audio_feedback")
+
+[node name="AtmosphereLayer" type="CanvasLayer" parent="."]
+layer = 15
+
+[node name="VignetteRect" type="ColorRect" parent="AtmosphereLayer"]
+material = SubResource("ShaderMaterial_atmo")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
 [node name="HUD" parent="." instance=ExtResource("5_hud_scene")]
 
 [node name="DialogueUI" parent="." instance=ExtResource("4_dialogue_ui")]
@@ -25,6 +49,8 @@ script = ExtResource("3_dialogue_service")
 [node name="NotebookUI" parent="." instance=ExtResource("6_notebook_ui")]
 
 [node name="ProjectUI" parent="." instance=ExtResource("7_project_ui")]
+
+[node name="PauseSaveUI" parent="." instance=ExtResource("8_pause_ui")]
 
 [node name="TransitionLayer" type="CanvasLayer" parent="."]
 layer = 100
