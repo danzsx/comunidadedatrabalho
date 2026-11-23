@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="WorldEventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/world_event_data.gd" id="1_bqft8"]
+
+[resource]
+script = ExtResource("1_bqft8")
+id = &"evt_fam_c_independent_shift"
+title = "Mudanca de turno na Familia Costa"
+can_happen_offscreen = true
+once = true
+min_day = 4
+target_period = 0
+conditions = Array[Dictionary]([])
+effects = Array[Dictionary]([{
+"fact_id": "fam_c_bruno_left_for_shift",
+"type": "set_fact",
+"value": true
+}])
+notification_hint = "Novidades no bairro: moradores comentam a viagem de trabalho do Bruno."

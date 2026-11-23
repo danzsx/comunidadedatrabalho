@@ -1,4 +1,10 @@
 ~ start
+if has_fact("fam_c_bruno_left_for_shift"):
+	Camila: Oi, Alex... o Bruno acabou aceitando aquele turno fora da cidade ontem mesmo. A casa ficou quieta de repente.
+	Alex: Puxa, aconteceu rápido. Como você está lidando com a rotina agora?
+	Camila: Um dia de cada vez. A cidade não espera ninguém decidir nada com calma, né?
+	=> END
+
 if has_fact("met_fam_c"):
 	Camila: Oi, Alex. Semana puxada por aqui — o Bruno está decidindo se aceita um turno em outra cidade.
 	=> END

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RoutineEntry" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/routine_entry.gd" id="1_uh64r"]
+
+[resource]
+script = ExtResource("1_uh64r")
+id = &"r_a1_default"
+npc_id = &"npc_a_1"
+day_filter = Array[int]([])
+period = -1
+location_id = &"loc_casa_fam_a"
+marker_name = &"spot_1"
+priority = 5
+conditions = Array[Dictionary]([])
+ambient_line = ""

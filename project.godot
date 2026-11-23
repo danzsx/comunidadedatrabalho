@@ -8,6 +8,10 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="ACS - Comunidade do Trabalho"
@@ -19,15 +23,14 @@ config/features=PackedStringArray("4.4", "GL Compatibility")
 EventBus="*res://scripts/core/event_bus.gd"
 DataRegistry="*res://scripts/core/data_registry.gd"
 WorldState="*res://scripts/core/world_state.gd"
+TimeSystem="*res://scripts/core/time_system.gd"
 SceneRouter="*res://scripts/core/scene_router.gd"
 SaveSystem="*res://scripts/core/save_system.gd"
 
 [debug]
 
-gdscript/warnings/exclude_addons=true
 gdscript/warnings/untyped_declaration=2
 gdscript/warnings/inferred_declaration=1
-gdscript/warnings/unused_signal=1
 gdscript/warnings/return_value_discarded=1
 
 [display]
@@ -37,7 +40,6 @@ window/size/viewport_height=270
 window/size/window_width_override=1440
 window/size/window_height_override=810
 window/stretch/mode="canvas_items"
-window/stretch/aspect="keep"
 
 [editor_plugins]
 
@@ -75,6 +77,10 @@ interact={
 , Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":32,"key_label":0,"unicode":32,"location":0,"echo":false,"script":null)
 ]
 }
+
+[internationalization]
+
+locale/translations_pot_files=PackedStringArray("res://data/dialogues/fam_a.dialogue", "res://data/dialogues/fam_b.dialogue", "res://data/dialogues/fam_c.dialogue", "res://data/dialogues/hortencia.dialogue")
 
 [rendering]
 

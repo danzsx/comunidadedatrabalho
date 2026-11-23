@@ -1,10 +1,8 @@
-[gd_scene load_steps=10 format=4]
+[gd_scene load_steps=8 format=4]
 
 [ext_resource type="Texture2D" path="res://assets/tilesets/greybox_world.png" id="1_s0wp1"]
 [ext_resource type="Script" path="res://scripts/world/environment_controller.gd" id="2_cfpg0"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/NPCBase.tscn" id="2_ey1vg"]
 [ext_resource type="Texture2D" path="res://assets/environments/light_radial.png" id="3_ey1vg"]
-[ext_resource type="Script" path="res://scripts/characters/npc_controller.gd" id="3_n465y"]
 [ext_resource type="PackedScene" path="res://scenes/components/ScenePortal.tscn" id="4_n465y"]
 [ext_resource type="Script" path="res://scripts/world/scene_portal.gd" id="5_al40m"]
 
@@ -65,18 +63,6 @@ y_sort_enabled = true
 y_sort_enabled = true
 tile_map_data = PackedByteArray("AAAQAAwAAAACAAEAAAAWAAwAAAACAAEAAAA=")
 tile_set = SubResource("TileSet_5ucbg")
-
-[node name="DonaRosa" type="CharacterBody2D" parent="EntitiesYSort" groups=["npcs"] instance=ExtResource("2_ey1vg")]
-position = Vector2(360, 232)
-collision_mask = 0
-script = ExtResource("3_n465y")
-character_id = &"npc_b_1"
-
-[node name="Camila" type="CharacterBody2D" parent="EntitiesYSort" groups=["npcs"] instance=ExtResource("2_ey1vg")]
-position = Vector2(424, 312)
-collision_mask = 0
-script = ExtResource("3_n465y")
-character_id = &"npc_c_1"
 
 [node name="WorldPatchesRoot" type="Node2D" parent="."]
 z_index = 3
@@ -180,3 +166,17 @@ target_spawn_id = &"spawn_door"
 offset_right = 640.0
 offset_bottom = 448.0
 mouse_filter = 2
+
+[node name="NPCSpots" type="Node2D" parent="."]
+
+[node name="spot_praca_1" type="Marker2D" parent="NPCSpots"]
+position = Vector2(360, 232)
+
+[node name="spot_praca_2" type="Marker2D" parent="NPCSpots"]
+position = Vector2(280, 248)
+
+[node name="spot_calcada_1" type="Marker2D" parent="NPCSpots"]
+position = Vector2(424, 312)
+
+[node name="spot_calcada_2" type="Marker2D" parent="NPCSpots"]
+position = Vector2(200, 312)

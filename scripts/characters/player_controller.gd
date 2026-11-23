@@ -55,8 +55,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		var key_event: InputEventKey = event as InputEventKey
 		if key_event.pressed and not key_event.echo:
 			if key_event.keycode == KEY_F5:
-				WorldState.period = (WorldState.period + 1) % 4
-				EventBus.period_changed.emit(WorldState.day, WorldState.period)
+				TimeSystem.advance_period(1)
 			elif key_event.keycode == KEY_F6:
-				WorldState.period = (WorldState.period + 3) % 4
-				EventBus.period_changed.emit(WorldState.day, WorldState.period)
+				TimeSystem.sleep_until_morning()

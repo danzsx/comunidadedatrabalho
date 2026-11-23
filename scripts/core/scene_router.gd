@@ -1,9 +1,10 @@
 extends Node
-## Manages map/interior transitions, spawn placement, and camera bounds.
+## Manages map/interior transitions, spawn placement, camera bounds, and dynamic NPC spawning.
 
 signal location_loaded(location_id: StringName)
 
 const FADE_DURATION: float = 0.22
+const NPC_SCENE_PATH: String = "res://scenes/npcs/NPCBase.tscn"
 
 var is_transitioning: bool = false
 
@@ -11,13 +12,18 @@ var _scene_container: Node = null
 var _fade_rect: ColorRect = null
 var _player: Node2D = null
 var _active_scene: Node = null
+var _npc_packed: PackedScene = null
 
 
 func _ready() -> void:
 	if not EventBus.scene_change_requested.is_connected(_on_scene_change_requested):
-		var err: Error = EventBus.scene_change_requested.connect(_on_scene_change_requested)
-		if err != OK:
+		var err1: Error = EventBus.scene_change_requested.connect(_on_scene_change_requested)
+		if err1 != OK:
 			push_warning("SceneRouter failed to connect scene_change_requested.")
+	if not EventBus.period_changed.is_connected(_on_period_changed):
+		var err2: Error = EventBus.period_changed.connect(_on_period_changed)
+		if err2 != OK:
+			push_warning("SceneRouter failed to connect period_changed.")
 
 
 func register_host(scene_container: Node, fade_rect: ColorRect, player: Node2D) -> void:
@@ -35,6 +41,11 @@ func _on_scene_change_requested(location_id: StringName, spawn_id: StringName) -
 	var err: Error = await change_location(location_id, spawn_id)
 	if err != OK:
 		push_error("SceneRouter failed to change location to '%s' (err=%d)" % [String(location_id), err])
+
+
+func _on_period_changed(_new_day: int, _new_period: int) -> void:
+	if _active_scene != null and is_instance_valid(_active_scene):
+		_sync_npcs_for_scene(_active_scene, WorldState.current_location_id)
 
 
 func change_location(location_id: StringName, spawn_id: StringName) -> Error:
@@ -62,7 +73,6 @@ func change_location(location_id: StringName, spawn_id: StringName) -> Error:
 	if _player != null and _player.has_method(&"set_movement_locked"):
 		_player.call(&"set_movement_locked", false)
 
-	# Small physics-frame cooldown prevents portal bounce on arrival.
 	if is_inside_tree():
 		await get_tree().physics_frame
 		await get_tree().physics_frame
@@ -91,6 +101,9 @@ func _swap_scene_sync(location_id: StringName, spawn_id: StringName) -> Error:
 		return ERR_CANT_OPEN
 
 	if _active_scene != null:
+		# Detach player before freeing previous scene so Alex is preserved.
+		if _player != null and _player.get_parent() != null and _active_scene.is_ancestor_of(_player):
+			_player.get_parent().remove_child(_player)
 		_active_scene.queue_free()
 		_active_scene = null
 
@@ -105,7 +118,48 @@ func _swap_scene_sync(location_id: StringName, spawn_id: StringName) -> Error:
 	WorldState.current_spawn_id = spawn_id
 	if _player != null:
 		WorldState.player_position = _player.global_position
+
+	_sync_npcs_for_scene(next_scene, location_id)
 	return OK
+
+
+func _sync_npcs_for_scene(scene_root: Node, location_id: StringName) -> void:
+	var y_sort: Node = scene_root.get_node_or_null("EntitiesYSort")
+	if y_sort == null:
+		return
+
+	# Remove previously spawned dynamic NPCs in this scene.
+	for child: Node in y_sort.get_children():
+		if child.is_in_group(&"npcs"):
+			child.queue_free()
+
+	if _npc_packed == null:
+		_npc_packed = load(NPC_SCENE_PATH) as PackedScene
+	if _npc_packed == null:
+		return
+
+	var scheduled: Array[Dictionary] = RoutineResolver.get_npcs_for_location(location_id, WorldState)
+	var spots_root: Node = scene_root.get_node_or_null("NPCSpots")
+	var fallback_index: int = 0
+
+	for entry: Dictionary in scheduled:
+		var npc_id: StringName = entry["npc_id"] as StringName
+		var marker_name: StringName = entry["marker_name"] as StringName
+		var npc: Node2D = _npc_packed.instantiate() as Node2D
+		npc.name = "NPC_" + String(npc_id)
+		npc.set("character_id", npc_id)
+
+		var pos: Vector2 = Vector2(128.0 + float(fallback_index * 24), 96.0)
+		if spots_root != null:
+			var spot: Node2D = spots_root.get_node_or_null(NodePath(String(marker_name))) as Node2D
+			if spot == null and spots_root.get_child_count() > 0:
+				spot = spots_root.get_child(fallback_index % spots_root.get_child_count()) as Node2D
+			if spot != null:
+				pos = spot.global_position
+
+		npc.position = pos
+		y_sort.add_child(npc)
+		fallback_index += 1
 
 
 func _place_player_at_spawn(scene_root: Node, spawn_id: StringName) -> void:
@@ -120,7 +174,6 @@ func _place_player_at_spawn(scene_root: Node, spawn_id: StringName) -> void:
 		if marker != null:
 			target_pos = marker.global_position
 
-	# Reparent player into EntitiesYSort if present so Y-Sort works across maps and props.
 	var y_sort_root: Node = scene_root.get_node_or_null("EntitiesYSort")
 	if y_sort_root != null:
 		if _player.get_parent() != null:

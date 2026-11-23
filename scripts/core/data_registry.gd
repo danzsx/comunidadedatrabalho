@@ -5,12 +5,16 @@ const LOCATIONS_DIR: String = "res://data/locations/"
 const CHARACTERS_DIR: String = "res://data/characters/"
 const FAMILIES_DIR: String = "res://data/families/"
 const ITEMS_DIR: String = "res://data/items/"
+const ROUTINES_DIR: String = "res://data/routines/"
+const EVENTS_DIR: String = "res://data/events/"
 const DIALOGUES_DIR: String = "res://data/dialogues/"
 
 var locations: Dictionary = {}
 var characters: Dictionary = {}
 var families: Dictionary = {}
 var items: Dictionary = {}
+var routines: Dictionary = {}
+var events: Dictionary = {}
 var dialogue_paths: Dictionary = {}
 
 
@@ -23,12 +27,16 @@ func reload_all() -> void:
 	characters.clear()
 	families.clear()
 	items.clear()
+	routines.clear()
+	events.clear()
 	dialogue_paths.clear()
 
 	_load_resources(LOCATIONS_DIR, locations, LocationData)
 	_load_resources(CHARACTERS_DIR, characters, CharacterData)
 	_load_resources(FAMILIES_DIR, families, FamilyData)
 	_load_resources(ITEMS_DIR, items, ItemData)
+	_load_resources(ROUTINES_DIR, routines, RoutineEntry)
+	_load_resources(EVENTS_DIR, events, WorldEventData)
 	_load_dialogue_paths()
 
 
@@ -152,6 +160,16 @@ func validate_integrity() -> Array[String]:
 		for member_id: StringName in fam.initial_members:
 			if not characters.has(member_id):
 				errors.append("Family '%s' references missing member '%s'" % [String(fam.id), String(member_id)])
+
+	for r_id: Variant in routines.keys():
+		var entry: RoutineEntry = routines[r_id] as RoutineEntry
+		if entry == null:
+			errors.append("Null RoutineEntry for key: %s" % str(r_id))
+			continue
+		if not characters.has(entry.npc_id):
+			errors.append("Routine '%s' references missing npc '%s'" % [String(entry.id), String(entry.npc_id)])
+		if entry.location_id != &"" and not locations.has(entry.location_id):
+			errors.append("Routine '%s' references missing location '%s'" % [String(entry.id), String(entry.location_id)])
 
 	return errors
 
