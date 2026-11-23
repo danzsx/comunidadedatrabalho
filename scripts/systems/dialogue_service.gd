@@ -178,3 +178,31 @@ func inc_career(axis: String, delta: int = 1) -> void:
 	var ws: Node = get_node_or_null("/root/WorldState")
 	if ws != null:
 		EffectApplier.apply_one({"type": "inc_career_axis", "axis": axis, "delta": delta}, ws, get_node_or_null("/root/EventBus"))
+
+
+func assign_visit(family_id: String, title: String) -> void:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	if ws != null:
+		FieldVisitService.assign_visit(ws, get_node_or_null("/root/EventBus"), StringName(family_id), title)
+
+
+func get_visit_stage(family_id: String) -> String:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	return FieldVisitService.get_visit_stage(ws, StringName(family_id))
+
+
+func get_clue_count(family_id: String) -> int:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	return HouseholdRecordService.get_clue_count(ws, StringName(family_id))
+
+
+func mark_listened(family_id: String, npc_id: String, respectful: bool) -> void:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	if ws != null:
+		FieldVisitService.mark_resident_listened(ws, get_node_or_null("/root/EventBus"), StringName(family_id), StringName(npc_id), respectful)
+
+
+func submit_referral(family_id: String, approach: String) -> void:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	if ws != null:
+		FieldVisitService.submit_ubs_referral(ws, get_node_or_null("/root/EventBus"), StringName(family_id), StringName(approach))

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="WorldEventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/world_event_data.gd" id="1_w5x4g"]
+
+[resource]
+script = ExtResource("1_w5x4g")
+id = &"evt_fam_a_consequence_rushed"
+title = "Distanciamento na Familia Alencar"
+can_happen_offscreen = true
+once = true
+min_day = 5
+target_period = 0
+conditions = Array[Dictionary]([{
+"fact_id": "fam_a_outcome_rushed",
+"type": "fact_equals",
+"value": true
+}])
+effects = Array[Dictionary]([{
+"fact_id": "fam_a_consequence_rushed",
+"type": "set_fact",
+"value": true
+}, {
+"axis": "trust",
+"delta": -2,
+"npc_id": "npc_a_2",
+"type": "add_relationship"
+}])
+notification_hint = "Dona Lucia parece mais fechada apos o registro apressado da visita."

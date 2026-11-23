@@ -1,0 +1,115 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/notebook_ui.gd" id="1_notebook_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_notebook"]
+bg_color = Color(0.95, 0.92, 0.84, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.32, 0.23, 0.16, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="NotebookUI" type="CanvasLayer"]
+layer = 60
+script = ExtResource("1_notebook_script")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dimmer" type="ColorRect" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.06, 0.05, 0.45)
+
+[node name="Panel" type="PanelContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = 20.0
+offset_right = -28.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_notebook")
+
+[node name="Margin" type="MarginContainer" parent="Root/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="VBox" type="VBoxContainer" parent="Root/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Header" type="Label" parent="Root/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.16, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "Caderno de Campo — ACS   ([N] ou [Esc] para fechar)"
+
+[node name="Tabs" type="TabContainer" parent="Root/Panel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="Atividades" type="MarginContainer" parent="Root/Panel/Margin/VBox/Tabs"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+metadata/_tab_index = 0
+
+[node name="ActivitiesText" type="RichTextLabel" parent="Root/Panel/Margin/VBox/Tabs/Atividades"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0.16, 0.14, 0.12, 1)
+theme_override_font_sizes/normal_font_size = 9
+text = "..."
+
+[node name="Familias" type="MarginContainer" parent="Root/Panel/Margin/VBox/Tabs"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+metadata/_tab_index = 1
+
+[node name="FamiliesText" type="RichTextLabel" parent="Root/Panel/Margin/VBox/Tabs/Familias"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0.16, 0.14, 0.12, 1)
+theme_override_font_sizes/normal_font_size = 9
+text = "..."
+
+[node name="Relacoes" type="MarginContainer" parent="Root/Panel/Margin/VBox/Tabs"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+metadata/_tab_index = 2
+
+[node name="RelationsText" type="RichTextLabel" parent="Root/Panel/Margin/VBox/Tabs/Relacoes"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0.16, 0.14, 0.12, 1)
+theme_override_font_sizes/normal_font_size = 9
+text = "..."

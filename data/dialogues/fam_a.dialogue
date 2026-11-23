@@ -1,18 +1,40 @@
 ~ start
+if has_fact("fam_a_consequence_supportive"):
+	Dona Lúcia: Alex, que bom te ver! A equipe da UBS passou aqui para organizar os horários das receitas e combinou uma rede de apoio com a vizinhança.
+	Dona Lúcia: Pela primeira vez em meses eu consegui respirar um pouco. Obrigada por ter reparado na nossa rotina sem julgar.
+	=> END
+
+if has_fact("fam_a_consequence_rushed"):
+	Dona Lúcia: Olá, Alex. Recebemos um aviso frio da UBS... confesso que fiquei chateada, pareceu que a gente estava fazendo tudo errado.
+	Dona Lúcia: Se for passar por aqui de novo, espero que a gente consiga conversar de verdade, com mais calma.
+	=> END
+
+if get_visit_stage("fam_a") == "ready_to_report":
+	Dona Lúcia: Obrigada pela conversa, Alex. Quando falar com a Hortência lá na UBS, manda um abraço meu.
+	=> END
+
 if has_fact("met_fam_a"):
-	Dona Lúcia: Oi, Alex. Meu pai está descansando um pouco na sala, mas pode entrar e conversar.
+	if get_clue_count("fam_a") >= 2:
+		Dona Lúcia: Reparei que você observou a casa com cuidado... a pilha de receitas, a umidade no corredor e o meu serviço acumulado.
+		- Não vim julgar nada, Dona Lúcia. Quero entender como a UBS pode ajudar a aliviar esse peso.
+			do mark_listened("fam_a", "npc_a_2", true)
+			Dona Lúcia: Que alívio ouvir isso... eu não dou conta de organizar os horários do meu pai e a costura sozinha. Pode anotar tudo no seu caderno.
+		- Só estou conferindo os pontos do protocolo para fechar o relatório hoje.
+			do mark_listened("fam_a", "npc_a_2", false)
+			Dona Lúcia: Entendi... anota o que precisar então. A gente vai se virando como sempre.
+		=> END
+	Dona Lúcia: Oi, Alex. Fique à vontade para dar uma olhada na casa — às vezes as coisas do dia a dia explicam melhor do que eu consigo falar.
 	=> END
 
 Dona Lúcia: Pois não? Você é o rapaz novo que a Hortência comentou que ia passar pelo bairro?
 Alex: Sou sim, Alex. Estou começando na UBS agora e passando para conhecer as famílias.
 Dona Lúcia: Ah, que bom. Aqui em casa a rotina anda meio corrida cuidando do seu Antônio e das coisas do Pedro.
-- Se precisar conversar com calma em outro horário, é só me avisar.
+- Se puder, gostaria de observar a casa com calma e ouvir como está o dia a dia de vocês.
 	do set_fact("met_fam_a", true)
-	do add_rel("npc_a_2", "trust", 1)
-	do add_rel("npc_a_2", "familiarity", 1)
-	Dona Lúcia: Obrigada, Alex. Só de alguém perguntar sem pressa já ajuda bastante.
+	do mark_listened("fam_a", "npc_a_2", true)
+	Dona Lúcia: Obrigada, Alex. Só de alguém perguntar sem pressa já ajuda bastante. Pode reparar nos detalhes aqui da sala também.
 - Só vim fazer o registro rápido de apresentação mesmo.
 	do set_fact("met_fam_a", true)
-	do add_rel("npc_a_2", "familiarity", 1)
+	do mark_listened("fam_a", "npc_a_2", false)
 	Dona Lúcia: Tudo bem... quando a Hortência passar por aqui a gente conversa direito.
 => END

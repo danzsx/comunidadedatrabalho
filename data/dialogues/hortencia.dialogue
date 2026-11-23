@@ -1,16 +1,30 @@
 ~ start
+if get_visit_stage("fam_a") == "ready_to_report":
+	Hortência: Que bom que você voltou da casa da Família Alencar, Alex. Vi no seu olhar que você reparou em bastante coisa lá.
+	Hortência: Como você quer registrar e articular essa situação aqui na equipe da UBS?
+	- Relatar a sobrecarga da Dona Lúcia e articular apoio comunitário com calma.
+		do submit_referral("fam_a", "supportive")
+		Hortência: Perfeito. Isso é o coração do trabalho de ACS: enxergar o todo sem invadir nem julgar. Vamos acompanhar o retorno deles no fim da semana.
+	- Entregar um registro curto e burocrático para encerrar logo a demanda.
+		do submit_referral("fam_a", "rushed")
+		Hortência: Está registrado, Alex... mas quando a gente reduz uma casa a formulário frio, a família sente. Vamos ver como eles reagem nos próximos dias.
+	=> END
+
 if has_fact("met_hortencia"):
-	Hortência: E aí, Alex. Como está sendo circular pelo bairro hoje?
-	if has_fact("hortencia_briefing_patient"):
-		Hortência: Gostei de ver você perguntando com calma. Aqui ninguém abre a porta de verdade para quem chega com pressa.
-	else:
-		Hortência: Lembra do que eu falei: nosso trabalho não é dar receita nem diagnosticar. É escutar, observar e construir ponte.
+	if get_visit_stage("fam_a") == "reported_supportive":
+		Hortência: A articulação para a Família Alencar já está andando. Vale passar por lá perto do Dia 5 para ver como eles estão.
+		=> END
+	if get_visit_stage("fam_a") == "reported_rushed":
+		Hortência: O registro da Família Alencar foi protocolado. Talvez valha conversar com a Dona Lúcia com mais calma mais adiante.
+		=> END
+	Hortência: E aí, Alex. Já conseguiu passar na casa da Família Alencar para observar o ambiente e conversar com a Dona Lúcia?
+	Hortência: Lembre de anotar o que reparar lá dentro e apertar N para consultar o Caderno de Campo.
 	=> END
 
 Hortência: Então você é o Alex... o rapaz que assumiu a vaga de Agente Comunitário quase por acaso.
 Alex: Foi meio no susto mesmo, dona Hortência. Preciso segurar o emprego pra continuar na faculdade.
 Hortência: Sem problema nenhum em começar assim. Quase todo mundo aqui chegou sem saber direito onde estava pisando.
-Hortência: Toma este caderno. Antes de sair anotando qualquer coisa, me diz uma coisa: como você pretende chegar na casa dos moradores?
+Hortência: Toma este caderno. Quero que sua primeira visita seja na casa da Família Alencar, aqui no bairro. Mas antes, me diz: como você pretende chegar lá?
 - Com calma, ouvindo primeiro antes de opinar.
 	do set_fact("met_hortencia", true)
 	do set_fact("hortencia_briefing_patient", true)
@@ -18,12 +32,14 @@ Hortência: Toma este caderno. Antes de sair anotando qualquer coisa, me diz uma
 	do add_rel("npc_hortencia", "familiarity", 1)
 	do give_item("item_caderno_campo", 1)
 	do inc_career("acs_engagement", 1)
-	Hortência: Esse é o caminho. Olha o ambiente, repara nos detalhes e respeita o tempo de cada família.
+	do assign_visit("fam_a", "Visita domiciliar — Família Alencar")
+	Hortência: Esse é o caminho. Olha o ambiente, repara nos detalhes e respeita o tempo de cada família. Nosso papel não é dar diagnóstico — é escutar e construir ponte.
 - Quero resolver tudo rápido pra dar conta do expediente e estudar.
 	do set_fact("met_hortencia", true)
 	do set_fact("hortencia_briefing_patient", false)
 	do add_rel("npc_hortencia", "familiarity", 1)
 	do give_item("item_caderno_campo", 1)
 	do inc_career("academic_focus", 1)
+	do assign_visit("fam_a", "Visita domiciliar — Família Alencar")
 	Hortência: Entendo sua pressa com a faculdade, de verdade. Só toma cuidado: gente não funciona no relógio do expediente.
 => END

@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="WorldEventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/world_event_data.gd" id="1_xws1g"]
+
+[resource]
+script = ExtResource("1_xws1g")
+id = &"evt_fam_a_consequence_supportive"
+title = "Retorno acolhedor da Familia Alencar"
+can_happen_offscreen = true
+once = true
+min_day = 5
+target_period = 0
+conditions = Array[Dictionary]([{
+"fact_id": "fam_a_outcome_supportive",
+"type": "fact_equals",
+"value": true
+}])
+effects = Array[Dictionary]([{
+"fact_id": "fam_a_consequence_supportive",
+"type": "set_fact",
+"value": true
+}, {
+"axis": "trust",
+"delta": 2,
+"npc_id": "npc_a_2",
+"type": "add_relationship"
+}, {
+"axis": "cooperation",
+"delta": 2,
+"npc_id": "npc_a_2",
+"type": "add_relationship"
+}])
+notification_hint = "A Familia Alencar comentou no bairro que se sentiu acolhida pela UBS."
