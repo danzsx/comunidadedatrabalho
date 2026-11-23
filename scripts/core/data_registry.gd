@@ -7,6 +7,7 @@ const FAMILIES_DIR: String = "res://data/families/"
 const ITEMS_DIR: String = "res://data/items/"
 const ROUTINES_DIR: String = "res://data/routines/"
 const EVENTS_DIR: String = "res://data/events/"
+const PROJECTS_DIR: String = "res://data/projects/"
 const DIALOGUES_DIR: String = "res://data/dialogues/"
 
 var locations: Dictionary = {}
@@ -15,6 +16,7 @@ var families: Dictionary = {}
 var items: Dictionary = {}
 var routines: Dictionary = {}
 var events: Dictionary = {}
+var projects: Dictionary = {}
 var dialogue_paths: Dictionary = {}
 
 
@@ -29,6 +31,7 @@ func reload_all() -> void:
 	items.clear()
 	routines.clear()
 	events.clear()
+	projects.clear()
 	dialogue_paths.clear()
 
 	_load_resources(LOCATIONS_DIR, locations, LocationData)
@@ -37,6 +40,7 @@ func reload_all() -> void:
 	_load_resources(ITEMS_DIR, items, ItemData)
 	_load_resources(ROUTINES_DIR, routines, RoutineEntry)
 	_load_resources(EVENTS_DIR, events, WorldEventData)
+	_load_resources(PROJECTS_DIR, projects, ProjectData)
 	_load_dialogue_paths()
 
 
@@ -119,6 +123,18 @@ func get_item(item_id: StringName) -> ItemData:
 	return items.get(item_id, null) as ItemData
 
 
+func has_project(project_id: StringName) -> bool:
+	return projects.has(project_id)
+
+
+func get_project(project_id: StringName) -> ProjectData:
+	return projects.get(project_id, null) as ProjectData
+
+
+func get_all_project_ids() -> Array[StringName]:
+	return _keys_as_string_names(projects)
+
+
 func has_dialogue(dialogue_id: StringName) -> bool:
 	return dialogue_paths.has(dialogue_id)
 
@@ -170,6 +186,20 @@ func validate_integrity() -> Array[String]:
 			errors.append("Routine '%s' references missing npc '%s'" % [String(entry.id), String(entry.npc_id)])
 		if entry.location_id != &"" and not locations.has(entry.location_id):
 			errors.append("Routine '%s' references missing location '%s'" % [String(entry.id), String(entry.location_id)])
+
+	for p_id: Variant in projects.keys():
+		var proj: ProjectData = projects[p_id] as ProjectData
+		if proj == null:
+			errors.append("Null ProjectData for key: %s" % str(p_id))
+			continue
+		for npc_id: StringName in proj.involved_npcs:
+			if not characters.has(npc_id):
+				errors.append("Project '%s' references missing npc '%s'" % [String(proj.id), String(npc_id)])
+		for stage_def: Dictionary in proj.stages:
+			var req_items: Dictionary = stage_def.get("required_items", {}) as Dictionary
+			for item_key: Variant in req_items.keys():
+				if not items.has(StringName(str(item_key))):
+					errors.append("Project '%s' references missing item '%s'" % [String(proj.id), str(item_key)])
 
 	return errors
 

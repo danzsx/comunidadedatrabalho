@@ -206,3 +206,24 @@ func submit_referral(family_id: String, approach: String) -> void:
 	var ws: Node = get_node_or_null("/root/WorldState")
 	if ws != null:
 		FieldVisitService.submit_ubs_referral(ws, get_node_or_null("/root/EventBus"), StringName(family_id), StringName(approach))
+
+
+func can_unlock_project(project_id: String) -> bool:
+	return ProjectService.can_unlock(get_node_or_null("/root/WorldState"), get_node_or_null("/root/DataRegistry"), StringName(project_id))
+
+
+func unlock_project(project_id: String) -> bool:
+	return ProjectService.unlock_project(
+		get_node_or_null("/root/WorldState"),
+		get_node_or_null("/root/DataRegistry"),
+		get_node_or_null("/root/EventBus"),
+		StringName(project_id)
+	)
+
+
+func is_project_unlocked(project_id: String) -> bool:
+	return ProjectService.is_unlocked(get_node_or_null("/root/WorldState"), StringName(project_id))
+
+
+func is_project_completed(project_id: String) -> bool:
+	return ProjectService.is_completed(get_node_or_null("/root/WorldState"), StringName(project_id))

@@ -78,3 +78,59 @@ func test_notebook_ui_renders_records_cleanly() -> void:
 	assert_string_contains(ui.activities_text.text, "Visita Familia Alencar")
 	assert_string_contains(ui.families_text.text, "Receitas na mesa.")
 	assert_string_contains(ui.relations_text.text, "Hortencia")
+
+
+func test_project_requires_relationship_and_updates_world_patch() -> void:
+	# Cannot unlock below relationship threshold.
+	assert_false(ProjectService.can_unlock(WorldState, DataRegistry, &"proj_jardim_praca"))
+	assert_false(ProjectService.unlock_project(WorldState, DataRegistry, EventBus, &"proj_jardim_praca"))
+
+	# Build affinity + familiarity with Dona Rosa (npc_b_1).
+	RelationshipService.adjust(WorldState, EventBus, &"npc_b_1", &"affinity", 2)
+	RelationshipService.adjust(WorldState, EventBus, &"npc_b_1", &"familiarity", 1)
+	assert_true(ProjectService.can_unlock(WorldState, DataRegistry, &"proj_jardim_praca"))
+	assert_true(ProjectService.unlock_project(WorldState, DataRegistry, EventBus, &"proj_jardim_praca"))
+	assert_true(ProjectService.is_unlocked(WorldState, &"proj_jardim_praca"))
+
+	# Cannot advance stage 0 without required items.
+	assert_false(ProjectService.can_advance_stage(WorldState, DataRegistry, &"proj_jardim_praca"))
+	InventorySystem.add_item(WorldState, &"item_ferramentas_jardim", 1)
+	InventorySystem.add_item(WorldState, &"item_composto_organico", 1)
+	assert_true(ProjectService.advance_stage(WorldState, DataRegistry, EventBus, &"proj_jardim_praca"))
+	assert_eq(ProjectService.get_stage(WorldState, &"proj_jardim_praca"), 1)
+	assert_eq(WorldState.world_patches[&"patch_praca_canteiro"], 1)
+	assert_eq(InventorySystem.get_count(WorldState, &"item_composto_organico"), 0)
+
+	# Complete stage 2 -> project finished and world patch at stage 2.
+	InventorySystem.add_item(WorldState, &"item_mudas_flores", 1)
+	assert_true(ProjectService.advance_stage(WorldState, DataRegistry, EventBus, &"proj_jardim_praca"))
+	assert_true(ProjectService.is_completed(WorldState, &"proj_jardim_praca"))
+	assert_eq(WorldState.world_patches[&"patch_praca_canteiro"], 2)
+	assert_eq(WorldState.get_fact(&"praca_canteiro_recuperado"), true)
+
+
+func test_world_patcher_toggles_visual_stages() -> void:
+	var packed: PackedScene = load("res://scenes/maps/BairroPraca.tscn") as PackedScene
+	var scene: Node = packed.instantiate()
+	add_child_autofree(scene)
+	var patcher: WorldPatcher = scene.get_node_or_null("WorldPatchesRoot/PatchPracaCanteiro") as WorldPatcher
+	assert_not_null(patcher, "BairroPraca should contain PatchPracaCanteiro WorldPatcher")
+
+	var s0: CanvasItem = patcher.get_node("Stage0") as CanvasItem
+	var s2: CanvasItem = patcher.get_node("Stage2") as CanvasItem
+	assert_true(s0.visible)
+	assert_false(s2.visible)
+
+	EffectApplier.apply_one({"type": "set_world_patch", "patch_id": "patch_praca_canteiro", "stage": 2}, WorldState, EventBus)
+	assert_false(s0.visible)
+	assert_true(s2.visible)
+
+
+func test_home_study_session_updates_trajectory_and_advances_period() -> void:
+	WorldState.day = 1
+	WorldState.period = 0
+	HomeActivityService.perform_study_session(WorldState, TimeSystem, EventBus)
+	assert_eq(WorldState.period, 1)
+	assert_eq(WorldState.get_fact(&"alex_study_sessions"), 1)
+	assert_eq(WorldState.career_trajectory[&"academic_focus"], 1)
+	assert_eq(WorldState.career_trajectory[&"self_reflection"], 1)

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_rdiox"]
+
+[resource]
+script = ExtResource("1_rdiox")
+id = &"item_mudas_flores"
+display_name = "Mudas de Flores e Temperos"
+description = "Mudas separadas por Dona Rosa para revitalizar o canteiro da praca."
+category = &"garden"
+stackable = true

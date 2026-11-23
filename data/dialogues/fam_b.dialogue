@@ -1,6 +1,36 @@
 ~ start
+if is_project_completed("proj_jardim_praca"):
+	Dona Rosa: Olha só como aquele canteiro mudou a cara da praça, Alex! Até os vizinhos que só passavam correndo pararam para olhar as flores.
+	Dona Rosa: Você chegou achando que não sabia cuidar de nada, e acabou devolvendo vida para um pedaço do bairro.
+	=> END
+
+if is_project_unlocked("proj_jardim_praca"):
+	Dona Rosa: Já separei as ferramentas, a terra adubada e as mudinhas pra você. É só chegar no canteiro da praça (ou apertar P) e ir concluindo as etapas no seu tempo!
+	=> END
+
+if can_unlock_project("proj_jardim_praca"):
+	Dona Rosa: Sabe, Alex... gostei do jeito que você escuta a gente. Aquele canteiro no canto leste da praça está abandonado faz meses.
+	Dona Rosa: Se você quiser aprender na prática, eu te empresto as ferramentas do Tiago, um pouco de composto e minhas mudas de flor. Topa recuperar aquele cantinho comigo?
+	- Topo sim, Dona Rosa! Quero ajudar a cuidar da praça.
+		do unlock_project("proj_jardim_praca")
+		do give_item("item_ferramentas_jardim", 1)
+		do give_item("item_composto_organico", 1)
+		do give_item("item_mudas_flores", 1)
+		do add_rel("npc_b_1", "cooperation", 1)
+		Dona Rosa: Maravilha! Toma aqui os materiais. Vai lá no canteiro da praça ou abre sua aba de Projetos (tecla P) para começar.
+	- Agora estou meio enrolado, podemos ver isso depois?
+		Dona Rosa: Claro, meu filho. As flores sabem esperar — quando puder, me chama aqui.
+	=> END
+
 if has_fact("met_fam_b"):
 	Dona Rosa: Olha só quem apareceu na praça de novo. Reparou como aquele canteiro ali no canto está precisando de cuidado?
+	- Se você puder me ensinar, gostaria de aprender mais sobre essas plantas.
+		do add_rel("npc_b_1", "affinity", 2)
+		do add_rel("npc_b_1", "familiarity", 1)
+		Dona Rosa: Ora, assim você me convence! Fala comigo de novo que eu já te passo as mudas e as ferramentas pra gente começar.
+	- Só passando para dar um oi rápido.
+		do add_rel("npc_b_1", "familiarity", 1)
+		Dona Rosa: Bom trabalho, menino.
 	=> END
 
 Dona Rosa: Bom dia, moço. Não conheço esse rosto por aqui não.
@@ -10,7 +40,7 @@ Dona Rosa: Hum... mais um menino de colete azul andando apressado pela calçada?
 	do set_fact("met_fam_b", true)
 	do add_rel("npc_b_1", "affinity", 2)
 	do add_rel("npc_b_1", "familiarity", 1)
-	Dona Rosa: Ora, gostei da sinceridade. Quem sabe outro dia eu não te mostro como salvar aquele canteiro da praça.
+	Dona Rosa: Ora, gostei da sinceridade. Fala comigo de novo quando quiser — tenho umas mudas e um plano para aquele canteiro da praça.
 - Estou só conhecendo a região por enquanto.
 	do set_fact("met_fam_b", true)
 	do add_rel("npc_b_1", "familiarity", 1)

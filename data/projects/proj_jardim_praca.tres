@@ -1,0 +1,60 @@
+[gd_resource type="Resource" script_class="ProjectData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/project_data.gd" id="1_0ixxm"]
+
+[resource]
+script = ExtResource("1_0ixxm")
+id = &"proj_jardim_praca"
+title = "Recuperar o Canteiro da Praca"
+description = "Projeto ensinado por Dona Rosa para devolver vida ao canteiro abandonado no lado leste da praca."
+involved_npcs = Array[StringName]([&"npc_b_1", &"npc_b_2"])
+unlock_conditions = Array[Dictionary]([{
+"axis": "affinity",
+"npc_id": "npc_b_1",
+"type": "rel_gte",
+"value": 2
+}, {
+"axis": "familiarity",
+"npc_id": "npc_b_1",
+"type": "rel_gte",
+"value": 1
+}])
+stages = Array[Dictionary]([{
+"completion_effects": [{
+"axis": "community_ties",
+"delta": 1,
+"type": "inc_career_axis"
+}],
+"label": "Limpar e preparar a terra do canteiro",
+"required_conditions": [],
+"required_items": {
+"item_composto_organico": 1,
+"item_ferramentas_jardim": 1
+}
+}, {
+"completion_effects": [{
+"fact_id": "praca_canteiro_recuperado",
+"type": "set_fact",
+"value": true
+}, {
+"axis": "cooperation",
+"delta": 2,
+"npc_id": "npc_b_1",
+"type": "add_relationship"
+}, {
+"axis": "affinity",
+"delta": 2,
+"npc_id": "npc_b_1",
+"type": "add_relationship"
+}, {
+"axis": "community_ties",
+"delta": 2,
+"type": "inc_career_axis"
+}],
+"label": "Plantar as mudas de Dona Rosa",
+"required_conditions": [],
+"required_items": {
+"item_mudas_flores": 1
+}
+}])
+world_patch_id = &"patch_praca_canteiro"

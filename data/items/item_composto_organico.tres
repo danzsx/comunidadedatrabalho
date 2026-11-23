@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_30218"]
+
+[resource]
+script = ExtResource("1_30218")
+id = &"item_composto_organico"
+display_name = "Composto Organico"
+description = "Terra adubada preparada no quintal de Dona Rosa."
+category = &"garden"
+stackable = true

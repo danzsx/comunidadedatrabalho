@@ -1,9 +1,13 @@
-[gd_scene load_steps=8 format=4]
+[gd_scene load_steps=12 format=4]
 
 [ext_resource type="Texture2D" path="res://assets/tilesets/greybox_world.png" id="1_s0wp1"]
+[ext_resource type="PackedScene" path="res://scenes/components/Interactable.tscn" id="2_al40m"]
 [ext_resource type="Script" path="res://scripts/world/environment_controller.gd" id="2_cfpg0"]
+[ext_resource type="Script" path="res://scripts/world/project_site.gd" id="3_5ucbg"]
 [ext_resource type="Texture2D" path="res://assets/environments/light_radial.png" id="3_ey1vg"]
+[ext_resource type="Script" path="res://scripts/world/world_patcher.gd" id="4_7f7oy"]
 [ext_resource type="PackedScene" path="res://scenes/components/ScenePortal.tscn" id="4_n465y"]
+[ext_resource type="TileSet" path="res://assets/tilesets/greybox_tileset.tres" id="5_6pvde"]
 [ext_resource type="Script" path="res://scripts/world/scene_portal.gd" id="5_al40m"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_snsax"]
@@ -64,9 +68,34 @@ y_sort_enabled = true
 tile_map_data = PackedByteArray("AAAQAAwAAAACAAEAAAAWAAwAAAACAAEAAAA=")
 tile_set = SubResource("TileSet_5ucbg")
 
+[node name="ProjectSiteCanteiro" type="Area2D" parent="EntitiesYSort" instance=ExtResource("2_al40m")]
+position = Vector2(384, 232)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("3_5ucbg")
+
 [node name="WorldPatchesRoot" type="Node2D" parent="."]
 z_index = 3
 y_sort_enabled = true
+
+[node name="PatchPracaCanteiro" type="Node2D" parent="WorldPatchesRoot"]
+script = ExtResource("4_7f7oy")
+patch_id = &"patch_praca_canteiro"
+
+[node name="Stage0" type="TileMapLayer" parent="WorldPatchesRoot/PatchPracaCanteiro"]
+tile_map_data = PackedByteArray("AAAXAA0AAAADAAEAAAAYAA0AAAADAAEAAAAXAA4AAAADAAEAAAAYAA4AAAADAAEAAAAXAA8AAAADAAEAAAAYAA8AAAADAAEAAAA=")
+tile_set = ExtResource("5_6pvde")
+
+[node name="Stage1" type="TileMapLayer" parent="WorldPatchesRoot/PatchPracaCanteiro"]
+visible = false
+tile_map_data = PackedByteArray("AAAXAA0AAAABAAAAAAAYAA0AAAABAAAAAAAXAA4AAAABAAAAAAAYAA4AAAABAAAAAAAXAA8AAAABAAAAAAAYAA8AAAABAAAAAAA=")
+tile_set = ExtResource("5_6pvde")
+
+[node name="Stage2" type="TileMapLayer" parent="WorldPatchesRoot/PatchPracaCanteiro"]
+visible = false
+tile_map_data = PackedByteArray("AAAXAA0AAAAEAAEAAAAYAA0AAAAEAAEAAAAXAA4AAAAEAAEAAAAYAA4AAAAEAAEAAAAXAA8AAAAEAAEAAAAYAA8AAAAEAAEAAAA=")
+tile_set = ExtResource("5_6pvde")
 
 [node name="CanopyOverlayLayer" type="TileMapLayer" parent="."]
 z_index = 10
