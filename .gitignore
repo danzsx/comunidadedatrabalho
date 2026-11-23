@@ -1,0 +1,25 @@
+# Godot 4
+.godot/
+*.translation
+
+# Godot 4+ specific
+export/
+export_presets.cfg
+
+# Mono / C# (caso apareça)
+.mono/
+data_*/
+
+# Sistema operacional e editores
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+*.bak
+*.swp
+~$*
+*-DESKTOP-*.tmp
+
+# Saves e logs locais de teste
+*.log
+user_saves_test/
