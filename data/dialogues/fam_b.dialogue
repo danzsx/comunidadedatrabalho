@@ -1,0 +1,18 @@
+~ start
+if has_fact("met_fam_b"):
+	Dona Rosa: Olha só quem apareceu na praça de novo. Reparou como aquele canteiro ali no canto está precisando de cuidado?
+	=> END
+
+Dona Rosa: Bom dia, moço. Não conheço esse rosto por aqui não.
+Alex: Sou Alex, comecei agora como Agente Comunitário na UBS.
+Dona Rosa: Hum... mais um menino de colete azul andando apressado pela calçada? Vamos ver se você para pra reparar nas flores do bairro também.
+- Eu confesso que não entendo muito de plantas, mas gostaria de aprender.
+	do set_fact("met_fam_b", true)
+	do add_rel("npc_b_1", "affinity", 2)
+	do add_rel("npc_b_1", "familiarity", 1)
+	Dona Rosa: Ora, gostei da sinceridade. Quem sabe outro dia eu não te mostro como salvar aquele canteiro da praça.
+- Estou só conhecendo a região por enquanto.
+	do set_fact("met_fam_b", true)
+	do add_rel("npc_b_1", "familiarity", 1)
+	Dona Rosa: Faz bem. A cidade só se revela pra quem caminha sem pressa.
+=> END

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="1_5gacc"]
+
+[resource]
+script = ExtResource("1_5gacc")
+id = &"npc_c_1"
+display_name = "Camila"
+age = 29
+occupation = "Atendente de Comercio"
+family_id = &"fam_c"
+residence_id = &"loc_casa_fam_c"
+personality_tags = Array[StringName]([&"comunicativa", &"atarefada"])
+interests = Array[StringName]([&"musica", &"feira"])
+knowledge_tags = Array[StringName]([&"comercio_local"])
+tint_color = Color(0.721569, 0.596078, 0.878431, 1)
+portrait_set = {}
+dialogue_id = &"fam_c"

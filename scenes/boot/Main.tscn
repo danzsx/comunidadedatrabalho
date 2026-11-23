@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/boot/main.gd" id="1_main_script"]
 [ext_resource type="PackedScene" path="res://scenes/player/Alex.tscn" id="2_alex_scene"]
+[ext_resource type="Script" path="res://scripts/systems/dialogue_service.gd" id="3_dialogue_service"]
+[ext_resource type="PackedScene" path="res://scenes/ui/DialogueUI.tscn" id="4_dialogue_ui"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_main_script")
@@ -9,6 +11,11 @@ script = ExtResource("1_main_script")
 [node name="SceneContainer" type="Node" parent="."]
 
 [node name="Alex" parent="." instance=ExtResource("2_alex_scene")]
+
+[node name="DialogueService" type="Node" parent="."]
+script = ExtResource("3_dialogue_service")
+
+[node name="DialogueUI" parent="." instance=ExtResource("4_dialogue_ui")]
 
 [node name="TransitionLayer" type="CanvasLayer" parent="."]
 layer = 100

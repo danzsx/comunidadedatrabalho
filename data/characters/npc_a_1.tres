@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="1_40w42"]
+
+[resource]
+script = ExtResource("1_40w42")
+id = &"npc_a_1"
+display_name = "Seu Antonio"
+age = 74
+occupation = "Aposentado"
+family_id = &"fam_a"
+residence_id = &"loc_casa_fam_a"
+personality_tags = Array[StringName]([&"reservado", &"observador"])
+interests = Array[StringName]([&"radio", &"memorias"])
+knowledge_tags = Array[StringName]([&"historia_local"])
+tint_color = Color(0.760784, 0.721569, 0.658824, 1)
+portrait_set = {}
+dialogue_id = &"fam_a"

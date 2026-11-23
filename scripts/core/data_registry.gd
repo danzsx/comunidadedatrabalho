@@ -2,8 +2,16 @@ extends Node
 ## Immutable runtime catalog of static game definitions loaded from res://data/.
 
 const LOCATIONS_DIR: String = "res://data/locations/"
+const CHARACTERS_DIR: String = "res://data/characters/"
+const FAMILIES_DIR: String = "res://data/families/"
+const ITEMS_DIR: String = "res://data/items/"
+const DIALOGUES_DIR: String = "res://data/dialogues/"
 
 var locations: Dictionary = {}
+var characters: Dictionary = {}
+var families: Dictionary = {}
+var items: Dictionary = {}
+var dialogue_paths: Dictionary = {}
 
 
 func _ready() -> void:
@@ -12,11 +20,20 @@ func _ready() -> void:
 
 func reload_all() -> void:
 	locations.clear()
-	_load_locations()
+	characters.clear()
+	families.clear()
+	items.clear()
+	dialogue_paths.clear()
+
+	_load_resources(LOCATIONS_DIR, locations, LocationData)
+	_load_resources(CHARACTERS_DIR, characters, CharacterData)
+	_load_resources(FAMILIES_DIR, families, FamilyData)
+	_load_resources(ITEMS_DIR, items, ItemData)
+	_load_dialogue_paths()
 
 
-func _load_locations() -> void:
-	var dir: DirAccess = DirAccess.open(LOCATIONS_DIR)
+func _load_resources(dir_path: String, target: Dictionary, expected_type: Variant) -> void:
+	var dir: DirAccess = DirAccess.open(dir_path)
 	if dir == null:
 		return
 	var err: Error = dir.list_dir_begin()
@@ -25,11 +42,27 @@ func _load_locations() -> void:
 	var file_name: String = dir.get_next()
 	while file_name != "":
 		if not dir.current_is_dir() and file_name.ends_with(".tres"):
-			var res: Resource = load(LOCATIONS_DIR + file_name)
-			if res is LocationData:
-				var loc: LocationData = res as LocationData
-				if loc.id != &"":
-					locations[loc.id] = loc
+			var res: Resource = load(dir_path + file_name)
+			if res != null and is_instance_of(res, expected_type):
+				var res_id: StringName = res.get("id") as StringName
+				if res_id != &"":
+					target[res_id] = res
+		file_name = dir.get_next()
+	dir.list_dir_end()
+
+
+func _load_dialogue_paths() -> void:
+	var dir: DirAccess = DirAccess.open(DIALOGUES_DIR)
+	if dir == null:
+		return
+	var err: Error = dir.list_dir_begin()
+	if err != OK:
+		return
+	var file_name: String = dir.get_next()
+	while file_name != "":
+		if not dir.current_is_dir() and file_name.ends_with(".dialogue"):
+			var dialogue_id: StringName = StringName(file_name.get_basename())
+			dialogue_paths[dialogue_id] = DIALOGUES_DIR + file_name
 		file_name = dir.get_next()
 	dir.list_dir_end()
 
@@ -43,14 +76,52 @@ func get_location(location_id: StringName) -> LocationData:
 
 
 func get_all_location_ids() -> Array[StringName]:
-	var ids: Array[StringName] = []
-	for key: Variant in locations.keys():
-		ids.append(key as StringName)
-	return ids
+	return _keys_as_string_names(locations)
+
+
+func has_character(character_id: StringName) -> bool:
+	return characters.has(character_id)
+
+
+func get_character(character_id: StringName) -> CharacterData:
+	return characters.get(character_id, null) as CharacterData
+
+
+func get_all_character_ids() -> Array[StringName]:
+	return _keys_as_string_names(characters)
+
+
+func has_family(family_id: StringName) -> bool:
+	return families.has(family_id)
+
+
+func get_family(family_id: StringName) -> FamilyData:
+	return families.get(family_id, null) as FamilyData
+
+
+func get_all_family_ids() -> Array[StringName]:
+	return _keys_as_string_names(families)
+
+
+func has_item(item_id: StringName) -> bool:
+	return items.has(item_id)
+
+
+func get_item(item_id: StringName) -> ItemData:
+	return items.get(item_id, null) as ItemData
+
+
+func has_dialogue(dialogue_id: StringName) -> bool:
+	return dialogue_paths.has(dialogue_id)
+
+
+func get_dialogue_path(dialogue_id: StringName) -> String:
+	return str(dialogue_paths.get(dialogue_id, ""))
 
 
 func validate_integrity() -> Array[String]:
 	var errors: Array[String] = []
+
 	for loc_id: Variant in locations.keys():
 		var loc: LocationData = locations[loc_id] as LocationData
 		if loc == null:
@@ -58,4 +129,35 @@ func validate_integrity() -> Array[String]:
 			continue
 		if loc.scene_path.is_empty() or not ResourceLoader.exists(loc.scene_path):
 			errors.append("Missing scene_path '%s' for location '%s'" % [loc.scene_path, String(loc.id)])
+
+	for char_id: Variant in characters.keys():
+		var ch: CharacterData = characters[char_id] as CharacterData
+		if ch == null:
+			errors.append("Null CharacterData for key: %s" % str(char_id))
+			continue
+		if ch.family_id != &"" and not families.has(ch.family_id):
+			errors.append("Character '%s' references missing family '%s'" % [String(ch.id), String(ch.family_id)])
+		if ch.residence_id != &"" and not locations.has(ch.residence_id):
+			errors.append("Character '%s' references missing residence '%s'" % [String(ch.id), String(ch.residence_id)])
+		if ch.dialogue_id != &"" and not dialogue_paths.has(ch.dialogue_id):
+			errors.append("Character '%s' references missing dialogue '%s'" % [String(ch.id), String(ch.dialogue_id)])
+
+	for fam_id: Variant in families.keys():
+		var fam: FamilyData = families[fam_id] as FamilyData
+		if fam == null:
+			errors.append("Null FamilyData for key: %s" % str(fam_id))
+			continue
+		if fam.residence_id != &"" and not locations.has(fam.residence_id):
+			errors.append("Family '%s' references missing residence '%s'" % [String(fam.id), String(fam.residence_id)])
+		for member_id: StringName in fam.initial_members:
+			if not characters.has(member_id):
+				errors.append("Family '%s' references missing member '%s'" % [String(fam.id), String(member_id)])
+
 	return errors
+
+
+func _keys_as_string_names(dict: Dictionary) -> Array[StringName]:
+	var ids: Array[StringName] = []
+	for key: Variant in dict.keys():
+		ids.append(key as StringName)
+	return ids

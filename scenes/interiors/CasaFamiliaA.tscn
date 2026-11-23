@@ -1,7 +1,9 @@
-[gd_scene load_steps=8 format=4]
+[gd_scene load_steps=10 format=4]
 
 [ext_resource type="Texture2D" path="res://assets/tilesets/greybox_world.png" id="1_41s5j"]
 [ext_resource type="Script" path="res://scripts/world/environment_controller.gd" id="2_47ejc"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/NPCBase.tscn" id="2_un33j"]
+[ext_resource type="Script" path="res://scripts/characters/npc_controller.gd" id="3_f621q"]
 [ext_resource type="Texture2D" path="res://assets/environments/light_radial.png" id="3_un33j"]
 [ext_resource type="PackedScene" path="res://scenes/components/ScenePortal.tscn" id="4_f621q"]
 [ext_resource type="Script" path="res://scripts/world/scene_portal.gd" id="5_yh6x6"]
@@ -63,6 +65,24 @@ y_sort_enabled = true
 y_sort_enabled = true
 tile_map_data = PackedByteArray("AAADAAMAAAACAAEAAAAEAAMAAAACAAEAAAANAAQAAAACAAEAAAAOAAQAAAACAAEAAAA=")
 tile_set = SubResource("TileSet_5ucbg")
+
+[node name="DonaLucia" type="CharacterBody2D" parent="EntitiesYSort" groups=["npcs"] instance=ExtResource("2_un33j")]
+position = Vector2(152, 104)
+collision_mask = 0
+script = ExtResource("3_f621q")
+character_id = &"npc_a_2"
+
+[node name="SeuAntonio" type="CharacterBody2D" parent="EntitiesYSort" groups=["npcs"] instance=ExtResource("2_un33j")]
+position = Vector2(88, 88)
+collision_mask = 0
+script = ExtResource("3_f621q")
+character_id = &"npc_a_1"
+
+[node name="Pedro" type="CharacterBody2D" parent="EntitiesYSort" groups=["npcs"] instance=ExtResource("2_un33j")]
+position = Vector2(216, 136)
+collision_mask = 0
+script = ExtResource("3_f621q")
+character_id = &"npc_a_3"
 
 [node name="WorldPatchesRoot" type="Node2D" parent="."]
 z_index = 3

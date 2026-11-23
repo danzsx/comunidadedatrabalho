@@ -20,6 +20,10 @@ func set_movement_locked(locked: bool) -> void:
 		velocity = Vector2.ZERO
 
 
+func is_movement_locked() -> bool:
+	return _movement_locked
+
+
 func get_facing() -> Vector2:
 	return _facing
 

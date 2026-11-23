@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="1_lagjp"]
+
+[resource]
+script = ExtResource("1_lagjp")
+id = &"npc_c_2"
+display_name = "Bruno"
+age = 24
+occupation = "Tecnico em Logistica"
+family_id = &"fam_c"
+residence_id = &"loc_casa_fam_c"
+personality_tags = Array[StringName]([&"indeciso", &"sonhador"])
+interests = Array[StringName]([&"viagens", &"estudos"])
+knowledge_tags = Array[StringName]([&"estradas"])
+tint_color = Color(0.533333, 0.658824, 0.878431, 1)
+portrait_set = {}
+dialogue_id = &"fam_c"

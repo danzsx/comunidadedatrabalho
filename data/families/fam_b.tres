@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="FamilyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/family_data.gd" id="1_t4aki"]
+
+[resource]
+script = ExtResource("1_t4aki")
+id = &"fam_b"
+family_name = "Familia Barbosa"
+residence_id = &"loc_casa_fam_b"
+initial_members = Array[StringName]([&"npc_b_1", &"npc_b_2"])
+summary = "Moradora jardineira atenta a memoria do bairro e filho mecanico."
+initial_conditions = Array[StringName]([&"garden_interest"])
+notes_seed = "Dona Rosa frequenta a praca e conhece a historia dos canteiros."

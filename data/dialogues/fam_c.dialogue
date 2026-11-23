@@ -1,0 +1,11 @@
+~ start
+if has_fact("met_fam_c"):
+	Camila: Oi, Alex. Semana puxada por aqui — o Bruno está decidindo se aceita um turno em outra cidade.
+	=> END
+
+Camila: Oi! Você é o novo agente da UBS, né?
+Alex: Isso, Alex. Estou conhecendo o pessoal da rua.
+Camila: Seja bem-vindo. A gente anda meio na correria esta semana por causa de trabalho, mas sempre que puder dá um alô.
+do set_fact("met_fam_c", true)
+do add_rel("npc_c_1", "familiarity", 1)
+=> END

@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://s1lcvyvjdini"
+path="res://.godot/imported/fam_b.dialogue-dcd5845244a72b28ec47c28200e7b43d.tres"
+
+[deps]
+
+source_file="res://data/dialogues/fam_b.dialogue"
+dest_files=["res://.godot/imported/fam_b.dialogue-dcd5845244a72b28ec47c28200e7b43d.tres"]
+
+[params]
+
+defaults=true

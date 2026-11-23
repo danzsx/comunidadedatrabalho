@@ -1,8 +1,10 @@
-[gd_scene load_steps=8 format=4]
+[gd_scene load_steps=10 format=4]
 
 [ext_resource type="Texture2D" path="res://assets/tilesets/greybox_world.png" id="1_dymk7"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/NPCBase.tscn" id="2_k0bs0"]
 [ext_resource type="Script" path="res://scripts/world/environment_controller.gd" id="2_tevkd"]
 [ext_resource type="Texture2D" path="res://assets/environments/light_radial.png" id="3_k0bs0"]
+[ext_resource type="Script" path="res://scripts/characters/npc_controller.gd" id="3_kqqlk"]
 [ext_resource type="PackedScene" path="res://scenes/components/ScenePortal.tscn" id="4_kqqlk"]
 [ext_resource type="Script" path="res://scripts/world/scene_portal.gd" id="5_ub20y"]
 
@@ -63,6 +65,12 @@ y_sort_enabled = true
 y_sort_enabled = true
 tile_map_data = PackedByteArray("AAADAAMAAAACAAEAAAAEAAMAAAACAAEAAAANAAQAAAACAAEAAAAOAAQAAAACAAEAAAA=")
 tile_set = SubResource("TileSet_5ucbg")
+
+[node name="Tiago" type="CharacterBody2D" parent="EntitiesYSort" groups=["npcs"] instance=ExtResource("2_k0bs0")]
+position = Vector2(152, 104)
+collision_mask = 0
+script = ExtResource("3_kqqlk")
+character_id = &"npc_b_2"
 
 [node name="WorldPatchesRoot" type="Node2D" parent="."]
 z_index = 3

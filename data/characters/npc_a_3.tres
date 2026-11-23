@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="1_i3xmf"]
+
+[resource]
+script = ExtResource("1_i3xmf")
+id = &"npc_a_3"
+display_name = "Pedro"
+age = 15
+occupation = "Estudante"
+family_id = &"fam_a"
+residence_id = &"loc_casa_fam_a"
+personality_tags = Array[StringName]([&"curioso", &"inquieto"])
+interests = Array[StringName]([&"bicicleta", &"desenho"])
+knowledge_tags = Array[StringName]([&"atalhos_bairro"])
+tint_color = Color(0.533333, 0.768627, 0.847059, 1)
+portrait_set = {}
+dialogue_id = &"fam_a"

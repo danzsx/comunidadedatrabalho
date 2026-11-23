@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="FamilyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/family_data.gd" id="1_bvq3d"]
+
+[resource]
+script = ExtResource("1_bvq3d")
+id = &"fam_a"
+family_name = "Familia Alencar"
+residence_id = &"loc_casa_fam_a"
+initial_members = Array[StringName]([&"npc_a_1", &"npc_a_2", &"npc_a_3"])
+summary = "Residencia com idoso, filha cuidadora sobrecarregada e neto escolar."
+initial_conditions = Array[StringName]([&"caregiver_overload"])
+notes_seed = "Primeira visita domiciliar prioritaria indicada por Hortencia."

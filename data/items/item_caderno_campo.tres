@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_74unh"]
+
+[resource]
+script = ExtResource("1_74unh")
+id = &"item_caderno_campo"
+display_name = "Caderno de Campo"
+description = "Caderno entregue por Hortencia para anotar observacoes e historias das familias."
+category = &"key_doc"
+stackable = false

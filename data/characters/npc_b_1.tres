@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="1_ici5n"]
+
+[resource]
+script = ExtResource("1_ici5n")
+id = &"npc_b_1"
+display_name = "Dona Rosa"
+age = 66
+occupation = "Aposentada e Jardineira"
+family_id = &"fam_b"
+residence_id = &"loc_casa_fam_b"
+personality_tags = Array[StringName]([&"franca", &"afetuosa"])
+interests = Array[StringName]([&"flores", &"horta"])
+knowledge_tags = Array[StringName]([&"jardinagem"])
+tint_color = Color(0.603922, 0.831373, 0.54902, 1)
+portrait_set = {}
+dialogue_id = &"fam_b"

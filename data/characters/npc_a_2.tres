@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="1_dvv7l"]
+
+[resource]
+script = ExtResource("1_dvv7l")
+id = &"npc_a_2"
+display_name = "Dona Lucia"
+age = 48
+occupation = "Costureira e Cuidadora"
+family_id = &"fam_a"
+residence_id = &"loc_casa_fam_a"
+personality_tags = Array[StringName]([&"dedicada", &"cansada"])
+interests = Array[StringName]([&"costura", &"familia"])
+knowledge_tags = Array[StringName]([&"cuidado_domestico"])
+tint_color = Color(0.831373, 0.54902, 0.611765, 1)
+portrait_set = {}
+dialogue_id = &"fam_a"

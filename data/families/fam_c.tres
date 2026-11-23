@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="FamilyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/family_data.gd" id="1_v83j0"]
+
+[resource]
+script = ExtResource("1_v83j0")
+id = &"fam_c"
+family_name = "Familia Costa"
+residence_id = &"loc_casa_fam_c"
+initial_members = Array[StringName]([&"npc_c_1", &"npc_c_2"])
+summary = "Irmaos trabalhadores lidando com possivel mudanca de emprego durante a semana."
+initial_conditions = Array[StringName]([&"work_transition"])
+notes_seed = "Rotina agitada; novidades podem acontecer mesmo sem visita."

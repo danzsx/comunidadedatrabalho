@@ -1,0 +1,18 @@
+~ start
+if has_fact("met_fam_a"):
+	Dona Lúcia: Oi, Alex. Meu pai está descansando um pouco na sala, mas pode entrar e conversar.
+	=> END
+
+Dona Lúcia: Pois não? Você é o rapaz novo que a Hortência comentou que ia passar pelo bairro?
+Alex: Sou sim, Alex. Estou começando na UBS agora e passando para conhecer as famílias.
+Dona Lúcia: Ah, que bom. Aqui em casa a rotina anda meio corrida cuidando do seu Antônio e das coisas do Pedro.
+- Se precisar conversar com calma em outro horário, é só me avisar.
+	do set_fact("met_fam_a", true)
+	do add_rel("npc_a_2", "trust", 1)
+	do add_rel("npc_a_2", "familiarity", 1)
+	Dona Lúcia: Obrigada, Alex. Só de alguém perguntar sem pressa já ajuda bastante.
+- Só vim fazer o registro rápido de apresentação mesmo.
+	do set_fact("met_fam_a", true)
+	do add_rel("npc_a_2", "familiarity", 1)
+	Dona Lúcia: Tudo bem... quando a Hortência passar por aqui a gente conversa direito.
+=> END

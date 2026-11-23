@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/characters/npc_controller.gd" id="1_npc_script"]
+[ext_resource type="Texture2D" path="res://assets/characters/alex_greybox.png" id="2_npc_tex"]
+[ext_resource type="PackedScene" path="res://scenes/components/Interactable.tscn" id="3_interactable"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_npc_feet"]
+size = Vector2(10, 6)
+
+[node name="NPCBase" type="CharacterBody2D" groups=["npcs"]]
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("1_npc_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_npc_tex")
+offset = Vector2(0, -12)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_npc_feet")
+
+[node name="Interactable" parent="." instance=ExtResource("3_interactable")]
+position = Vector2(0, -6)
+prompt_text = "Conversar"

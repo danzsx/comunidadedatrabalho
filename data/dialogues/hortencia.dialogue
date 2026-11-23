@@ -1,0 +1,29 @@
+~ start
+if has_fact("met_hortencia"):
+	Hortência: E aí, Alex. Como está sendo circular pelo bairro hoje?
+	if has_fact("hortencia_briefing_patient"):
+		Hortência: Gostei de ver você perguntando com calma. Aqui ninguém abre a porta de verdade para quem chega com pressa.
+	else:
+		Hortência: Lembra do que eu falei: nosso trabalho não é dar receita nem diagnosticar. É escutar, observar e construir ponte.
+	=> END
+
+Hortência: Então você é o Alex... o rapaz que assumiu a vaga de Agente Comunitário quase por acaso.
+Alex: Foi meio no susto mesmo, dona Hortência. Preciso segurar o emprego pra continuar na faculdade.
+Hortência: Sem problema nenhum em começar assim. Quase todo mundo aqui chegou sem saber direito onde estava pisando.
+Hortência: Toma este caderno. Antes de sair anotando qualquer coisa, me diz uma coisa: como você pretende chegar na casa dos moradores?
+- Com calma, ouvindo primeiro antes de opinar.
+	do set_fact("met_hortencia", true)
+	do set_fact("hortencia_briefing_patient", true)
+	do add_rel("npc_hortencia", "trust", 2)
+	do add_rel("npc_hortencia", "familiarity", 1)
+	do give_item("item_caderno_campo", 1)
+	do inc_career("acs_engagement", 1)
+	Hortência: Esse é o caminho. Olha o ambiente, repara nos detalhes e respeita o tempo de cada família.
+- Quero resolver tudo rápido pra dar conta do expediente e estudar.
+	do set_fact("met_hortencia", true)
+	do set_fact("hortencia_briefing_patient", false)
+	do add_rel("npc_hortencia", "familiarity", 1)
+	do give_item("item_caderno_campo", 1)
+	do inc_career("academic_focus", 1)
+	Hortência: Entendo sua pressa com a faculdade, de verdade. Só toma cuidado: gente não funciona no relógio do expediente.
+=> END

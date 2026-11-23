@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://cpcsq7ifi3xqw"
+path="res://.godot/imported/hortencia.dialogue-a79acf55bd3cef40d49558651d894feb.tres"
+
+[deps]
+
+source_file="res://data/dialogues/hortencia.dialogue"
+dest_files=["res://.godot/imported/hortencia.dialogue-a79acf55bd3cef40d49558651d894feb.tres"]
+
+[params]
+
+defaults=true
