@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"item_colheita_hortela"
+display_name = "Ramo de Hortelã"
+description = "Hortelã aromática colhida na Horta Comunitária."
+category = &"produce"
+stackable = true

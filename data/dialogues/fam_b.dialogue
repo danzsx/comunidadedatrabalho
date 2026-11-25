@@ -1,4 +1,29 @@
 ~ start
+if is_garden_unlocked() and has_any_produce() and can_share_produce_today("npc_b_1"):
+	Dona Rosa: Olha esse cheirinho de terra fresca na sua mochila, Alex! Colheu alguma coisa boa lá na Horta Comunitária?
+	- Trouxe parte da nossa colheita para você, Dona Rosa!
+		do share_best_produce_with("npc_b_1")
+		Dona Rosa: Que coisa mais linda, meu filho! Dá gosto ver o bairro colhendo o que plantou junto. Obrigada de coração!
+		=> END
+	- Vim conversar sobre outra coisa hoje.
+		=> main_rosa
+=> main_rosa
+
+~ main_rosa
+if has_fact("met_fam_b") and not is_garden_unlocked():
+	Dona Rosa: Sabe aquele terreninho ensolarado na saída leste da praça, Alex? A vizinhança quer montar uma Horta Comunitária lá!
+	Dona Rosa: Já separei umas sementes de cheiro-verde, alface e cenoura. Quer abrir a horta comigo para a gente cuidar e dividir a colheita com o bairro?
+	- Quero sim, Dona Rosa! Vou preparar os primeiros canteiros lá hoje mesmo.
+		do unlock_garden()
+		do add_rel("npc_b_1", "cooperation", 1)
+		do add_rel("npc_b_1", "affinity", 1)
+		Dona Rosa: Que maravilha! Pegue a trilha no canto leste da praça. Lá dentro você usa as teclas 1 a 6 para alternar regador, enxada e sementes!
+		=> END
+	- Vamos deixar para daqui a pouco — quero falar sobre o canteiro da praça antes.
+		=> rosa_normal
+=> rosa_normal
+
+~ rosa_normal
 if is_project_completed("proj_jardim_praca"):
 	Dona Rosa: Olha só como aquele canteiro mudou a cara da praça, Alex! Até os vizinhos que só passavam correndo pararam para olhar as flores.
 	Dona Rosa: Você chegou achando que não sabia cuidar de nada, e acabou devolvendo vida para um pedaço do bairro.

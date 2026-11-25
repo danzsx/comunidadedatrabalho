@@ -7,6 +7,7 @@ extends CanvasLayer
 @onready var location_label: Label = $Root/TopRightPanel/Margin/LocationLabel
 @onready var toast_panel: PanelContainer = $Root/ToastPanel
 @onready var toast_label: Label = $Root/ToastPanel/Margin/ToastLabel
+@onready var bottom_hint_panel: PanelContainer = get_node_or_null("Root/BottomHintPanel") as PanelContainer
 
 var _toast_timer: SceneTreeTimer = null
 
@@ -37,6 +38,8 @@ func refresh() -> void:
 
 	var loc: LocationData = DataRegistry.get_location(WorldState.current_location_id)
 	location_label.text = loc.display_name if loc != null else String(WorldState.current_location_id)
+	if bottom_hint_panel != null:
+		bottom_hint_panel.visible = (WorldState.current_location_id != &"loc_horta_comunitaria")
 
 
 func _on_period_changed(_new_day: int, _new_period: int) -> void:

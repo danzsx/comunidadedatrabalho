@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="CropData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/crop_data.gd" id="1_crop"]
+
+[resource]
+script = ExtResource("1_crop")
+id = &"crop_tomate_cereja"
+display_name = "Tomate-Cereja"
+description = "Trepadeira produtiva com estacas de bambu e frutos doces de alto rendimento."
+seed_item_id = &"item_semente_tomate_cereja"
+produce_item_id = &"item_colheita_tomate_cereja"
+growth_target = 8
+water_drain_per_day_period = 1
+regrows = true
+regrow_stage = 2
+base_yield = 3
+required_garden_level = 2
+favorite_npcs = Array[StringName]([&"npc_b_1", &"npc_c_1"])
+sprite_sheet_path = "res://assets/objects/garden/crop_tomate_cereja.png"

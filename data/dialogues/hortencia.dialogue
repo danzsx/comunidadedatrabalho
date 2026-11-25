@@ -1,4 +1,15 @@
 ~ start
+if get_dengue_count() > 0:
+	Hortência: Alex, que bom que você passou aqui! Já estamos atendendo morador do bairro com sintomas de dengue aqui na UBS.
+	Hortência: Precisamos reforçar a inspeção ambiental nos quintais e no terreno baldio perto da praça para eliminar os focos de água parada.
+	Alex: Pode deixar comigo, Hortência. Vou revisar os quintais e o terreno agora mesmo.
+	=> END
+
+if get_infested_zones_count() > 0:
+	Hortência: Alex, alguns vizinhos comentaram que aumentaram os mosquitos perto dos quintais e do terreno baldio.
+	Hortência: Vale voltar lá com calma para fazer a inspeção ambiental antes que alguém acabe ficando com dengue.
+	=> END
+
 if WorldState.day >= 7 and not has_fact("week1_reflection_done"):
 	Hortência: Uma semana inteira já passou desde que você chegou aqui meio sem saber o que esperar, né Alex?
 	Hortência: Vi você circulando pelo bairro, ouvindo gente diferente e tentando encaixar o trabalho com seus estudos.
@@ -19,6 +30,18 @@ if get_visit_stage("fam_a") == "ready_to_report":
 		Hortência: Está registrado, Alex... mas quando a gente reduz uma casa a formulário frio, a família sente. Vamos ver como eles reagem nos próximos dias.
 	=> END
 
+if has_fact("met_hortencia"):
+	if has_any_produce() and can_share_produce_today("npc_hortencia"):
+		Hortência: Que aroma bom vindo da sua mochila, Alex! Colheu alguma coisa na Horta Comunitária?
+		- Trouxe colheita fresca da horta para a equipe da UBS!
+			do share_best_produce_with("npc_hortencia")
+			Hortência: Que carinho, Alex! Um chá e comida fresca aproximam muito mais do que qualquer cartaz na parede. Obrigada!
+			=> END
+		- Vim conversar sobre o trabalho no bairro.
+			=> hortencia_status
+	=> hortencia_status
+
+~ hortencia_status
 if has_fact("met_hortencia"):
 	if get_visit_stage("fam_a") == "reported_supportive":
 		Hortência: A articulação para a Família Alencar já está andando. Vale passar por lá perto do Dia 5 para ver como eles estão.

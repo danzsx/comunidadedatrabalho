@@ -1,0 +1,266 @@
+[gd_scene load_steps=25 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/environments/horta_comunitaria_ground.png" id="1_ground"]
+[ext_resource type="Script" path="res://scripts/world/environment_controller.gd" id="2_env_ctrl"]
+[ext_resource type="Texture2D" path="res://assets/environments/light_radial.png" id="3_light"]
+[ext_resource type="PackedScene" path="res://scenes/components/ScenePortal.tscn" id="4_portal_scene"]
+[ext_resource type="Script" path="res://scripts/world/scene_portal.gd" id="5_portal_script"]
+[ext_resource type="PackedScene" path="res://scenes/components/GardenPlot.tscn" id="6_plot_scene"]
+[ext_resource type="PackedScene" path="res://scenes/components/Interactable.tscn" id="7_interactable"]
+[ext_resource type="Script" path="res://scripts/world/garden_water_source.gd" id="8_water_script"]
+[ext_resource type="Script" path="res://scripts/world/garden_compost_box.gd" id="9_compost_script"]
+[ext_resource type="Script" path="res://scripts/world/garden_board.gd" id="10_board_script"]
+[ext_resource type="Texture2D" path="res://assets/objects/garden/water_cistern.png" id="11_cistern_tex"]
+[ext_resource type="Texture2D" path="res://assets/objects/garden/garden_board.png" id="12_board_tex"]
+[ext_resource type="Texture2D" path="res://assets/objects/garden/fruit_tree_orange.png" id="13_tree_tex"]
+[ext_resource type="Texture2D" path="res://assets/objects/garden/garden_bench.png" id="14_bench_tex"]
+[ext_resource type="Shader" path="res://shaders/foliage_sway.gdshader" id="15_sway_shader"]
+[ext_resource type="Shader" path="res://shaders/water_ripple.gdshader" id="16_water_shader"]
+[ext_resource type="Script" path="res://scripts/world/world_patcher.gd" id="17_patcher"]
+[ext_resource type="Script" path="res://scripts/world/ambient_particles.gd" id="18_particles"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_water"]
+shader = ExtResource("16_water_shader")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tree1"]
+shader = ExtResource("15_sway_shader")
+shader_parameter/sway_speed = 1.5
+shader_parameter/sway_strength = 1.6
+shader_parameter/phase_offset = 0.4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tree2"]
+shader = ExtResource("15_sway_shader")
+shader_parameter/sway_speed = 1.5
+shader_parameter/sway_strength = 1.6
+shader_parameter/phase_offset = 1.9
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tree3"]
+shader = ExtResource("15_sway_shader")
+shader_parameter/sway_speed = 1.5
+shader_parameter/sway_strength = 1.6
+shader_parameter/phase_offset = 3.1
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h"]
+size = Vector2(448, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
+size = Vector2(16, 304)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_left_seg"]
+size = Vector2(16, 132)
+
+[node name="HortaComunitaria" type="Node2D"]
+
+[node name="GroundArt" type="Sprite2D" parent="."]
+texture = ExtResource("1_ground")
+centered = false
+
+[node name="PerimeterWalls" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="TopWall" type="CollisionShape2D" parent="PerimeterWalls"]
+position = Vector2(224, 18)
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="BottomWall" type="CollisionShape2D" parent="PerimeterWalls"]
+position = Vector2(224, 298)
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="RightWall" type="CollisionShape2D" parent="PerimeterWalls"]
+position = Vector2(442, 152)
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="LeftTopWall" type="CollisionShape2D" parent="PerimeterWalls"]
+position = Vector2(6, 68)
+shape = SubResource("RectangleShape2D_wall_left_seg")
+
+[node name="LeftBottomWall" type="CollisionShape2D" parent="PerimeterWalls"]
+position = Vector2(6, 246)
+shape = SubResource("RectangleShape2D_wall_left_seg")
+
+[node name="EntitiesYSort" type="Node2D" parent="."]
+z_index = 3
+y_sort_enabled = true
+
+[node name="Plot0" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(128, 96)
+plot_id = &"plot_0"
+
+[node name="Plot1" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(160, 96)
+plot_id = &"plot_1"
+
+[node name="Plot2" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(128, 128)
+plot_id = &"plot_2"
+
+[node name="Plot3" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(160, 128)
+plot_id = &"plot_3"
+
+[node name="Plot4" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(280, 96)
+plot_id = &"plot_4"
+
+[node name="Plot5" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(312, 96)
+plot_id = &"plot_5"
+
+[node name="Plot6" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(280, 128)
+plot_id = &"plot_6"
+
+[node name="Plot7" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(312, 128)
+plot_id = &"plot_7"
+
+[node name="Plot8" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(128, 200)
+plot_id = &"plot_8"
+
+[node name="Plot9" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(160, 200)
+plot_id = &"plot_9"
+
+[node name="Plot10" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(128, 232)
+plot_id = &"plot_10"
+
+[node name="Plot11" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(160, 232)
+plot_id = &"plot_11"
+
+[node name="Plot12" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(280, 200)
+plot_id = &"plot_12"
+
+[node name="Plot13" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(312, 200)
+plot_id = &"plot_13"
+
+[node name="Plot14" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(280, 232)
+plot_id = &"plot_14"
+
+[node name="Plot15" parent="EntitiesYSort" instance=ExtResource("6_plot_scene")]
+position = Vector2(312, 232)
+plot_id = &"plot_15"
+
+[node name="CompostBox" type="Area2D" parent="EntitiesYSort" instance=ExtResource("7_interactable")]
+position = Vector2(92, 56)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("9_compost_script")
+
+[node name="GardenBoard" type="Area2D" parent="EntitiesYSort" instance=ExtResource("7_interactable")]
+position = Vector2(222, 52)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("10_board_script")
+
+[node name="BoardSprite" type="Sprite2D" parent="EntitiesYSort/GardenBoard"]
+texture = ExtResource("12_board_tex")
+offset = Vector2(0, -8)
+
+[node name="WaterSource" type="Area2D" parent="EntitiesYSort" instance=ExtResource("7_interactable")]
+position = Vector2(376, 224)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("8_water_script")
+
+[node name="CisternSprite" type="Sprite2D" parent="EntitiesYSort/WaterSource"]
+material = SubResource("ShaderMaterial_water")
+texture = ExtResource("11_cistern_tex")
+
+[node name="FruitTree1" type="Sprite2D" parent="EntitiesYSort"]
+material = SubResource("ShaderMaterial_tree1")
+position = Vector2(382, 74)
+texture = ExtResource("13_tree_tex")
+offset = Vector2(0, -24)
+
+[node name="FruitTree2" type="Sprite2D" parent="EntitiesYSort"]
+material = SubResource("ShaderMaterial_tree2")
+position = Vector2(414, 134)
+texture = ExtResource("13_tree_tex")
+offset = Vector2(0, -24)
+
+[node name="FruitTree3" type="Sprite2D" parent="EntitiesYSort"]
+material = SubResource("ShaderMaterial_tree3")
+position = Vector2(54, 248)
+texture = ExtResource("13_tree_tex")
+offset = Vector2(0, -24)
+
+[node name="WorldPatchesRoot" type="Node2D" parent="."]
+z_index = 3
+y_sort_enabled = true
+
+[node name="PatchHortaExpansao" type="Node2D" parent="WorldPatchesRoot"]
+script = ExtResource("17_patcher")
+patch_id = &"patch_horta_expansao"
+
+[node name="Stage0" type="Node2D" parent="WorldPatchesRoot/PatchHortaExpansao"]
+
+[node name="Stage1" type="Node2D" parent="WorldPatchesRoot/PatchHortaExpansao"]
+visible = false
+
+[node name="Stage2" type="Node2D" parent="WorldPatchesRoot/PatchHortaExpansao"]
+visible = false
+
+[node name="Stage3" type="Sprite2D" parent="WorldPatchesRoot/PatchHortaExpansao"]
+visible = false
+position = Vector2(222, 268)
+texture = ExtResource("14_bench_tex")
+
+[node name="LightingRoot" type="Node2D" parent="."]
+z_index = 20
+script = ExtResource("2_env_ctrl")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="LightingRoot"]
+
+[node name="GardenLamp" type="PointLight2D" parent="LightingRoot" groups=["night_lights"]]
+position = Vector2(222, 158)
+enabled = false
+color = Color(1, 0.78, 0.48, 1)
+energy = 0.0
+texture = ExtResource("3_light")
+texture_scale = 3.2
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="spawn_entrance" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(44, 158)
+
+[node name="Portals" type="Node2D" parent="."]
+
+[node name="PortalBairro" type="Area2D" parent="Portals" instance=ExtResource("4_portal_scene")]
+position = Vector2(12, 158)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("5_portal_script")
+target_location_id = &"loc_bairro_praca"
+target_spawn_id = &"spawn_horta"
+
+[node name="CameraBounds" type="ReferenceRect" parent="."]
+offset_right = 448.0
+offset_bottom = 304.0
+mouse_filter = 2
+
+[node name="NPCSpots" type="Node2D" parent="."]
+
+[node name="spot_horta_1" type="Marker2D" parent="NPCSpots"]
+position = Vector2(222, 158)
+
+[node name="spot_horta_2" type="Marker2D" parent="NPCSpots"]
+position = Vector2(348, 158)
+
+[node name="spot_horta_3" type="Marker2D" parent="NPCSpots"]
+position = Vector2(186, 158)
+
+[node name="AmbientParticles" type="Node2D" parent="."]
+script = ExtResource("18_particles")
+area_size = Vector2(448, 304)

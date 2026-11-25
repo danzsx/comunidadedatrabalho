@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="CropData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/crop_data.gd" id="1_crop"]
+
+[resource]
+script = ExtResource("1_crop")
+id = &"crop_cheiro_verde"
+display_name = "Cheiro-Verde"
+description = "Erva aromática rápida, resistente e rebrotável. Muito usada nas cozinhas do bairro."
+seed_item_id = &"item_semente_cheiro_verde"
+produce_item_id = &"item_colheita_cheiro_verde"
+growth_target = 3
+water_drain_per_day_period = 0
+regrows = true
+regrow_stage = 1
+base_yield = 2
+required_garden_level = 0
+favorite_npcs = Array[StringName]([&"npc_a_2", &"npc_b_1"])
+sprite_sheet_path = "res://assets/objects/garden/crop_cheiro_verde.png"

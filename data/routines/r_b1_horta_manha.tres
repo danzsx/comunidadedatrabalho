@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="RoutineEntry" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/routine_entry.gd" id="1_routine"]
+
+[resource]
+script = ExtResource("1_routine")
+id = &"r_b1_horta_manha"
+npc_id = &"npc_b_1"
+day_filter = Array[int]([6, 13, 20, 27])
+period = 0
+location_id = &"loc_horta_comunitaria"
+marker_name = &"spot_horta_1"
+priority = 20
+conditions = Array[Dictionary]([{
+"fact_id": "horta_unlocked",
+"type": "fact_equals",
+"value": true
+}])
+ambient_line = "Sábado de manhã é o melhor horário para cuidar da horta!"

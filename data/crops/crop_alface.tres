@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="CropData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/crop_data.gd" id="1_crop"]
+
+[resource]
+script = ExtResource("1_crop")
+id = &"crop_alface"
+display_name = "Alface Crespa"
+description = "Hortaliça macia de crescimento rápido que gosta de solo sempre úmido."
+seed_item_id = &"item_semente_alface"
+produce_item_id = &"item_colheita_alface"
+growth_target = 4
+water_drain_per_day_period = 1
+regrows = false
+regrow_stage = 1
+base_yield = 2
+required_garden_level = 0
+favorite_npcs = Array[StringName]([&"npc_c_1"])
+sprite_sheet_path = "res://assets/objects/garden/crop_alface.png"

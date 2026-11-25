@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://scripts/boot/main.gd" id="1_main_script"]
 [ext_resource type="PackedScene" path="res://scenes/player/Alex.tscn" id="2_alex_scene"]
@@ -10,6 +10,9 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/PauseSaveUI.tscn" id="8_pause_ui"]
 [ext_resource type="Script" path="res://scripts/systems/audio_feedback.gd" id="9_audio_feedback"]
 [ext_resource type="Shader" path="res://shaders/lighting_atmosphere.gdshader" id="10_atmo_shader"]
+[ext_resource type="PackedScene" path="res://scenes/ui/EnvironmentalInspectionUI.tscn" id="11_env_ui"]
+[ext_resource type="PackedScene" path="res://scenes/ui/GardenHotbarUI.tscn" id="12_garden_hotbar"]
+[ext_resource type="PackedScene" path="res://scenes/ui/GardenBoardUI.tscn" id="13_garden_board"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_atmo"]
 shader = ExtResource("10_atmo_shader")
@@ -49,6 +52,12 @@ mouse_filter = 2
 [node name="NotebookUI" parent="." instance=ExtResource("6_notebook_ui")]
 
 [node name="ProjectUI" parent="." instance=ExtResource("7_project_ui")]
+
+[node name="EnvironmentalInspectionUI" parent="." instance=ExtResource("11_env_ui")]
+
+[node name="GardenHotbarUI" parent="." instance=ExtResource("12_garden_hotbar")]
+
+[node name="GardenBoardUI" parent="." instance=ExtResource("13_garden_board")]
 
 [node name="PauseSaveUI" parent="." instance=ExtResource("8_pause_ui")]
 

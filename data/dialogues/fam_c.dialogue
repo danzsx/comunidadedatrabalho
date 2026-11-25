@@ -1,4 +1,15 @@
 ~ start
+if has_fact("met_fam_c") and has_any_produce() and can_share_produce_today("npc_c_1"):
+	Camila: Oi, Alex! Que cheiro bom de coisa fresca — isso veio da Horta Comunitária?
+	- Trouxe um pouco da nossa colheita para você, Camila!
+		do share_best_produce_with("npc_c_1")
+		Camila: Sério?! Que gentileza, Alex! Nessa correria do comércio eu mal consigo passar na feira. Muito obrigada!
+		=> END
+	- Só passei para conversar um pouco hoje.
+		=> camila_normal
+=> camila_normal
+
+~ camila_normal
 if has_fact("fam_c_bruno_left_for_shift"):
 	Camila: Oi, Alex... o Bruno acabou aceitando aquele turno fora da cidade ontem mesmo. A casa ficou quieta de repente.
 	Alex: Puxa, aconteceu rápido. Como você está lidando com a rotina agora?

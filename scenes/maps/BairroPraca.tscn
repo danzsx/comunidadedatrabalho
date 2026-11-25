@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=4]
+[gd_scene load_steps=47 format=4]
 
 [ext_resource type="Texture2D" path="res://assets/tilesets/greybox_world.png" id="1_s0wp1"]
 [ext_resource type="PackedScene" path="res://scenes/components/Interactable.tscn" id="2_al40m"]
@@ -27,6 +27,10 @@
 [ext_resource type="Texture2D" path="res://assets/objects/garden_stage2.png" id="21_wpqb2"]
 [ext_resource type="Texture2D" path="res://assets/environments/bairro_praca_ground.png" id="26_tstvc"]
 [ext_resource type="Script" path="res://scripts/world/ambient_particles.gd" id="27_cccad"]
+[ext_resource type="Script" path="res://scripts/world/inspection_site.gd" id="28_insp_site"]
+[ext_resource type="Script" path="res://scripts/world/mosquito_swarm.gd" id="29_mosquito"]
+[ext_resource type="Script" path="res://scripts/world/residence_door.gd" id="30_res_door"]
+[ext_resource type="Texture2D" path="res://assets/objects/garden/sign_horta_praca.png" id="31_sign_horta"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_snsax"]
 texture = ExtResource("1_s0wp1")
@@ -180,6 +184,46 @@ collision_mask = 0
 monitoring = false
 script = ExtResource("3_5ucbg")
 
+[node name="InspectionQuintalFamA" type="Area2D" parent="EntitiesYSort" instance=ExtResource("2_al40m")]
+position = Vector2(82, 384)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("28_insp_site")
+zone_id = &"zone_quintal_fam_a"
+is_terreno = false
+
+[node name="InspectionTerrenoLeste" type="Area2D" parent="EntitiesYSort" instance=ExtResource("2_al40m")]
+position = Vector2(522, 236)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("28_insp_site")
+zone_id = &"zone_terreno_leste"
+is_terreno = true
+
+[node name="InspectionQuintalFamC" type="Area2D" parent="EntitiesYSort" instance=ExtResource("2_al40m")]
+position = Vector2(548, 384)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("28_insp_site")
+zone_id = &"zone_quintal_fam_c"
+is_terreno = false
+
+[node name="ResidenceDoorFamA" type="Area2D" parent="EntitiesYSort" instance=ExtResource("2_al40m")]
+position = Vector2(136, 366)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("30_res_door")
+family_id = &"fam_a"
+primary_npc_id = &"npc_a_2"
+residence_label = "Casa da Família Alencar"
+portal_path = NodePath("../../Portals/PortalFamA")
+target_location_id = &"loc_casa_fam_a"
+target_spawn_id = &"spawn_door"
+
 [node name="BuildingCasaAlex" type="Sprite2D" parent="EntitiesYSort"]
 position = Vector2(120, 124)
 texture = ExtResource("4_4gw8e")
@@ -308,6 +352,11 @@ position = Vector2(586, 366)
 texture = ExtResource("16_236i1")
 offset = Vector2(0, -30)
 
+[node name="SignHorta" type="Sprite2D" parent="EntitiesYSort"]
+position = Vector2(560, 148)
+texture = ExtResource("31_sign_horta")
+offset = Vector2(0, -16)
+
 [node name="WorldPatchesRoot" type="Node2D" parent="."]
 z_index = 3
 y_sort_enabled = true
@@ -419,6 +468,9 @@ position = Vector2(312, 376)
 [node name="spawn_fam_c" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(488, 376)
 
+[node name="spawn_horta" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(540, 160)
+
 [node name="Portals" type="Node2D" parent="."]
 
 [node name="PortalCasaAlex" type="Area2D" parent="Portals" instance=ExtResource("4_n465y")]
@@ -447,6 +499,7 @@ monitorable = false
 script = ExtResource("5_al40m")
 target_location_id = &"loc_casa_fam_a"
 target_spawn_id = &"spawn_door"
+require_door_interaction = true
 
 [node name="PortalFamB" type="Area2D" parent="Portals" instance=ExtResource("4_n465y")]
 position = Vector2(312, 360)
@@ -465,6 +518,16 @@ monitorable = false
 script = ExtResource("5_al40m")
 target_location_id = &"loc_casa_fam_c"
 target_spawn_id = &"spawn_door"
+
+[node name="PortalHorta" type="Area2D" parent="Portals" instance=ExtResource("4_n465y")]
+position = Vector2(592, 160)
+scale = Vector2(2.5, 4)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("5_al40m")
+target_location_id = &"loc_horta_comunitaria"
+target_spawn_id = &"spawn_entrance"
 
 [node name="CameraBounds" type="ReferenceRect" parent="."]
 offset_right = 640.0
@@ -491,3 +554,6 @@ centered = false
 
 [node name="AmbientParticles" type="Node2D" parent="."]
 script = ExtResource("27_cccad")
+
+[node name="MosquitoSwarm" type="Node2D" parent="."]
+script = ExtResource("29_mosquito")

@@ -1,0 +1,255 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/environmental_inspection_ui.gd" id="1_ui_script"]
+[ext_resource type="Script" path="res://scripts/ui/environmental_inspection_canvas.gd" id="2_canvas_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_parchment"]
+bg_color = Color(0.95, 0.92, 0.84, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.32, 0.23, 0.16, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.16, 0.17, 0.22, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.68, 0.56, 0.36, 0.95)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_scene_frame"]
+bg_color = Color(0.24, 0.20, 0.16, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.36, 0.26, 0.18, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_note"]
+bg_color = Color(0.91, 0.87, 0.77, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.46, 0.35, 0.24, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="EnvironmentalInspectionUI" type="CanvasLayer"]
+layer = 65
+script = ExtResource("1_ui_script")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dimmer" type="ColorRect" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.06, 0.05, 0.04, 0.62)
+
+[node name="MainPanel" type="PanelContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = 10.0
+offset_right = -14.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_parchment")
+
+[node name="Margin" type="MarginContainer" parent="Root/MainPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="VBox" type="VBoxContainer" parent="Root/MainPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="HeaderBar" type="PanelContainer" parent="Root/MainPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="Margin" type="MarginContainer" parent="Root/MainPanel/Margin/VBox/HeaderBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 3
+
+[node name="HBox" type="HBoxContainer" parent="Root/MainPanel/Margin/VBox/HeaderBar/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TitleLabel" type="Label" parent="Root/MainPanel/Margin/VBox/HeaderBar/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.98, 0.94, 0.84, 1)
+theme_override_font_sizes/font_size = 9
+text = "Inspeção Ambiental"
+
+[node name="StatsLabel" type="Label" parent="Root/MainPanel/Margin/VBox/HeaderBar/Margin/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.88, 0.56, 1)
+theme_override_font_sizes/font_size = 8
+text = "Focos: 0/4 · Erros: 0/3 · 55s"
+
+[node name="AbortButton" type="Button" parent="Root/MainPanel/Margin/VBox/HeaderBar/Margin/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Sair"
+
+[node name="ContentSplit" type="HBoxContainer" parent="Root/MainPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="SceneFrame" type="PanelContainer" parent="Root/MainPanel/Margin/VBox/ContentSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_scene_frame")
+
+[node name="InspectionCanvas" type="Control" parent="Root/MainPanel/Margin/VBox/ContentSplit/SceneFrame"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("2_canvas_script")
+
+[node name="ObserverPanel" type="PanelContainer" parent="Root/MainPanel/Margin/VBox/ContentSplit"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_note")
+
+[node name="Margin" type="MarginContainer" parent="Root/MainPanel/Margin/VBox/ContentSplit/ObserverPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="VBox" type="VBoxContainer" parent="Root/MainPanel/Margin/VBox/ContentSplit/ObserverPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="ObsTitle" type="Label" parent="Root/MainPanel/Margin/VBox/ContentSplit/ObserverPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.22, 0.15, 0.09, 1)
+theme_override_font_sizes/font_size = 9
+text = "Lupa de Campo"
+autowrap_mode = 3
+
+[node name="ObsClue" type="Label" parent="Root/MainPanel/Margin/VBox/ContentSplit/ObserverPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.24, 0.20, 0.16, 1)
+theme_override_font_sizes/font_size = 8
+text = "Clique nos recipientes para observar."
+autowrap_mode = 3
+
+[node name="ActionBox" type="VBoxContainer" parent="Root/MainPanel/Margin/VBox/ContentSplit/ObserverPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="BtnEliminate" type="Button" parent="Root/MainPanel/Margin/VBox/ContentSplit/ObserverPanel/Margin/VBox/ActionBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+disabled = true
+text = "Eliminar Foco"
+
+[node name="BtnSafe" type="Button" parent="Root/MainPanel/Margin/VBox/ContentSplit/ObserverPanel/Margin/VBox/ActionBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+disabled = true
+text = "Sem Risco (Seguro)"
+
+[node name="FeedbackLabel" type="Label" parent="Root/MainPanel/Margin/VBox/ContentSplit/ObserverPanel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.20, 0.34, 0.22, 1)
+theme_override_font_sizes/font_size = 8
+text = ""
+autowrap_mode = 3
+
+[node name="SummaryOverlay" type="PanelContainer" parent="Root"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -74.0
+offset_right = 150.0
+offset_bottom = 74.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_parchment")
+
+[node name="Margin" type="MarginContainer" parent="Root/SummaryOverlay"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="VBox" type="VBoxContainer" parent="Root/SummaryOverlay/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SummaryTitle" type="Label" parent="Root/SummaryOverlay/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.20, 0.14, 0.08, 1)
+theme_override_font_sizes/font_size = 10
+text = "Resultado da Inspeção"
+horizontal_alignment = 1
+
+[node name="SummaryBody" type="Label" parent="Root/SummaryOverlay/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.22, 0.18, 0.14, 1)
+theme_override_font_sizes/font_size = 8
+text = "..."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="CloseButton" type="Button" parent="Root/SummaryOverlay/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Voltar ao Bairro"
+
+[connection signal="pressed" from="Root/MainPanel/Margin/VBox/HeaderBar/Margin/HBox/AbortButton" to="." method="_on_abort_pressed"]
+[connection signal="pressed" from="Root/MainPanel/Margin/VBox/ContentSplit/ObserverPanel/Margin/VBox/ActionBox/BtnEliminate" to="." method="_on_eliminate_pressed"]
+[connection signal="pressed" from="Root/MainPanel/Margin/VBox/ContentSplit/ObserverPanel/Margin/VBox/ActionBox/BtnSafe" to="." method="_on_safe_pressed"]
+[connection signal="pressed" from="Root/SummaryOverlay/Margin/VBox/CloseButton" to="." method="_on_summary_close_pressed"]

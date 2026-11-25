@@ -10,6 +10,8 @@ const _DM_SCRIPT: Script = preload("res://addons/dialogue_manager/dialogue_manag
 var is_active: bool = false
 var current_dialogue_id: StringName = &""
 var current_line: DialogueLine = null
+var active_npc_id: StringName = &""
+var active_context: Dictionary = {}
 
 var _dm: Node = null
 var _current_resource: DialogueResource = null
@@ -39,15 +41,15 @@ func bind_host(player: Node, dialogue_ui: Node) -> void:
 				push_warning("DialogueService failed to connect DialogueUI advance_requested.")
 
 
-func _on_dialogue_requested(dialogue_id: StringName, start_node: String, _context: Dictionary) -> void:
-	await start_dialogue(dialogue_id, start_node)
+func _on_dialogue_requested(dialogue_id: StringName, start_node: String, context: Dictionary) -> void:
+	await start_dialogue(dialogue_id, start_node, context)
 
 
 func _on_ui_advance_requested(next_id: String) -> void:
 	await advance(next_id)
 
 
-func start_dialogue(dialogue_id: StringName, start_node: String = "start") -> Error:
+func start_dialogue(dialogue_id: StringName, start_node: String = "start", context: Dictionary = {}) -> Error:
 	if is_active:
 		return ERR_BUSY
 	var registry: Node = get_node_or_null("/root/DataRegistry")
@@ -63,7 +65,13 @@ func start_dialogue(dialogue_id: StringName, start_node: String = "start") -> Er
 
 	_current_resource = res
 	current_dialogue_id = dialogue_id
+	active_context = context.duplicate(true)
+	var raw_npc: Variant = context.get("npc_id", &"")
+	active_npc_id = raw_npc as StringName if raw_npc is StringName else StringName(str(raw_npc))
 	is_active = true
+
+	if _dialogue_ui != null and _dialogue_ui.has_method(&"set_dialogue_context"):
+		_dialogue_ui.call(&"set_dialogue_context", active_npc_id, active_context)
 
 	if _player != null and _player.has_method(&"set_movement_locked"):
 		_player.call(&"set_movement_locked", true)
@@ -102,6 +110,8 @@ func _close_dialogue() -> void:
 	current_dialogue_id = &""
 	current_line = null
 	_current_resource = null
+	active_npc_id = &""
+	active_context = {}
 
 	if _dialogue_ui != null and _dialogue_ui.has_method(&"hide_dialogue"):
 		_dialogue_ui.call(&"hide_dialogue")
@@ -227,3 +237,117 @@ func is_project_unlocked(project_id: String) -> bool:
 
 func is_project_completed(project_id: String) -> bool:
 	return ProjectService.is_completed(get_node_or_null("/root/WorldState"), StringName(project_id))
+
+
+func get_dengue_count() -> int:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	return EnvironmentalInspectionService.get_infected_npcs(ws).size()
+
+
+func get_infested_zones_count() -> int:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	return EnvironmentalInspectionService.get_infested_zones(ws).size()
+
+
+func record_visit_memory(family_id: String, key: String, value: Variant = true) -> void:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	if ws != null:
+		HouseholdRecordService.set_memory(ws, get_node_or_null("/root/EventBus"), StringName(family_id), key, value)
+
+
+func get_visit_memory(family_id: String, key: String, default_value: Variant = "") -> Variant:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	return HouseholdRecordService.get_memory(ws, StringName(family_id), key, default_value)
+
+
+func has_visit_memory(family_id: String, key: String) -> bool:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	return HouseholdRecordService.has_memory(ws, StringName(family_id), key)
+
+
+func add_followup(family_id: String, followup_id: String, description: String, days_until_due: int = 1) -> void:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	if ws != null:
+		var due_day: int = int(ws.get("day")) + maxi(1, days_until_due)
+		HouseholdRecordService.add_followup(ws, get_node_or_null("/root/EventBus"), StringName(family_id), followup_id, description, due_day)
+
+
+func resolve_followup(family_id: String, followup_id: String) -> void:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	if ws != null:
+		HouseholdRecordService.resolve_followup(ws, get_node_or_null("/root/EventBus"), StringName(family_id), followup_id)
+
+
+func has_pending_followup(family_id: String, followup_id: String) -> bool:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	return HouseholdRecordService.has_pending_followup(ws, StringName(family_id), followup_id)
+
+
+func has_any_pending_followup(family_id: String) -> bool:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	return not HouseholdRecordService.get_pending_followups(ws, StringName(family_id)).is_empty()
+
+
+func finish_home_visit(family_id: String, npc_id: String, approach: String, summary: String) -> void:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	if ws != null:
+		FieldVisitService.complete_home_visit(
+			ws,
+			get_node_or_null("/root/EventBus"),
+			StringName(family_id),
+			StringName(npc_id),
+			approach,
+			summary
+		)
+
+
+func get_visit_count(family_id: String) -> int:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	return HouseholdRecordService.get_visit_count(ws, StringName(family_id))
+
+
+func get_npc_availability(npc_id: String) -> String:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	var reg: Node = get_node_or_null("/root/DataRegistry")
+	var avail: Dictionary = NPCAvailabilityService.get_availability(ws, reg, StringName(npc_id))
+	return str(avail.get("status", "available"))
+
+
+func is_garden_unlocked() -> bool:
+	return CommunityGardenService.is_unlocked(get_node_or_null("/root/WorldState"))
+
+
+func unlock_garden() -> void:
+	var _ok: bool = CommunityGardenService.unlock_garden(
+		get_node_or_null("/root/WorldState"),
+		get_node_or_null("/root/EventBus")
+	)
+
+
+func has_any_produce() -> bool:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	var reg: Node = get_node_or_null("/root/DataRegistry")
+	return not CommunityGardenService.get_available_produce_items(ws, reg).is_empty()
+
+
+func can_share_produce_today(npc_id: String) -> bool:
+	return CommunityGardenService.can_share_today(get_node_or_null("/root/WorldState"), StringName(npc_id))
+
+
+func share_best_produce_with(npc_id: String) -> bool:
+	var res: Dictionary = CommunityGardenService.share_best_produce_with_npc(
+		get_node_or_null("/root/WorldState"),
+		get_node_or_null("/root/DataRegistry"),
+		get_node_or_null("/root/EventBus"),
+		StringName(npc_id)
+	)
+	return bool(res.get("ok", false))
+
+
+func get_garden_harvest_total() -> int:
+	var summary: Dictionary = CommunityGardenService.get_summary_counts(get_node_or_null("/root/WorldState"))
+	return int(summary.get("total_harvests", 0))
+
+
+func get_garden_level() -> int:
+	return CommunityGardenService.get_level(get_node_or_null("/root/WorldState"))

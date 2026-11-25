@@ -24,6 +24,7 @@ func _ready() -> void:
 		_safe_connect(bus, &"dialogue_requested", _on_dialogue_requested)
 		_safe_connect(bus, &"household_record_updated", _on_notebook_updated)
 		_safe_connect(bus, &"project_stage_changed", _on_project_changed)
+		_safe_connect(bus, &"garden_harvested", _on_garden_harvested)
 
 
 func play_save_chime() -> void:
@@ -39,6 +40,10 @@ func _on_notebook_updated(_family_id: StringName) -> void:
 
 
 func _on_project_changed(_project_id: StringName, _stage: int) -> void:
+	_play(_sfx_project)
+
+
+func _on_garden_harvested(_crop_id: StringName, _amount: int) -> void:
 	_play(_sfx_project)
 
 
