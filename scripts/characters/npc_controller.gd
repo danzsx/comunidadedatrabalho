@@ -39,6 +39,13 @@ const AMBIENT_LINES: Dictionary = {
 	],
 }
 
+const DENGUE_LINES: Array[String] = [
+	"Que febre e dor atrás dos olhos... ainda bem que vim na UBS.",
+	"Tô tomando bastante soro aqui na UBS pra me recuperar.",
+	"Vi muitos mosquitos perto de casa esses dias...",
+	"O corpo dói inteiro, parece dengue mesmo.",
+]
+
 @export var character_id: StringName = &""
 @export var dialogue_start_node: String = "start"
 @export var wander_radius: float = 30.0
@@ -56,6 +63,8 @@ var _wander_timer: float = 2.0
 var _bubble_timer: float = 5.0
 var _facing_dir: String = "down"
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var _has_dengue: bool = false
+var _fever_pulse: float = 0.0
 
 
 func _ready() -> void:
@@ -72,7 +81,13 @@ func _ready() -> void:
 		var err: Error = interactable.interacted.connect(_on_interacted)
 		if err != OK:
 			push_warning("NPCController failed to connect interacted.")
+	var bus: Node = get_node_or_null("/root/EventBus")
+	if bus != null and not bus.is_connected(&"npc_dengue_status_changed", _on_dengue_status_changed):
+		var err2: Error = bus.connect(&"npc_dengue_status_changed", _on_dengue_status_changed)
+		if err2 != OK:
+			push_warning("NPCController failed to connect npc_dengue_status_changed.")
 	apply_character_data()
+	_refresh_dengue_state()
 
 
 func apply_character_data() -> void:
@@ -108,6 +123,13 @@ func _physics_process(delta: float) -> void:
 		_bubble_timer = _rng.randf_range(8.0, 15.0)
 		if player_node != null and global_position.distance_to(player_node.global_position) < 150.0:
 			_say_ambient_line()
+
+	if _has_dengue:
+		_fever_pulse += delta
+		queue_redraw()
+		velocity = Vector2.ZERO
+		_play_anim(false)
+		return
 
 	# Seu Antonio rests quietly in place (just looks around gently)
 	if character_id == &"npc_a_1":
@@ -146,6 +168,10 @@ func _physics_process(delta: float) -> void:
 
 func _say_ambient_line() -> void:
 	if _speech_bubble == null:
+		return
+	if _has_dengue:
+		var sick_line: String = DENGUE_LINES[_rng.randi_range(0, DENGUE_LINES.size() - 1)]
+		_speech_bubble.show_message(sick_line, 3.4)
 		return
 	var ws: Node = get_node_or_null("/root/WorldState")
 	if ws != null:
@@ -198,3 +224,28 @@ func _on_interacted(actor: Node) -> void:
 			dialogue_start_node,
 			{"npc_id": character_id}
 		)
+
+
+func _on_dengue_status_changed(npc_id: StringName, _infected: bool) -> void:
+	if npc_id == character_id:
+		_refresh_dengue_state()
+
+
+func _refresh_dengue_state() -> void:
+	var ws: Node = get_node_or_null("/root/WorldState")
+	_has_dengue = EnvironmentalInspectionService.is_npc_infected(ws, character_id)
+	if anim_sprite != null:
+		anim_sprite.modulate = Color(1.0, 0.88, 0.84, 1.0) if _has_dengue else Color(1.0, 1.0, 1.0, 1.0)
+	queue_redraw()
+
+
+func _draw() -> void:
+	if not _has_dengue:
+		return
+	var bob: float = sin(_fever_pulse * 3.8) * 1.2
+	var icon_pos: Vector2 = Vector2(0.0, -34.0 + bob)
+	draw_circle(icon_pos, 4.2, Color(0.86, 0.24, 0.20, 0.92))
+	draw_arc(icon_pos, 4.2, 0.0, TAU, 12, Color(1.0, 0.94, 0.88, 0.95), 1.0)
+	# Small white medical cross inside the alert badge
+	draw_line(icon_pos + Vector2(-2.0, 0.0), icon_pos + Vector2(2.0, 0.0), Color(1.0, 1.0, 1.0, 1.0), 1.2)
+	draw_line(icon_pos + Vector2(0.0, -2.0), icon_pos + Vector2(0.0, 2.0), Color(1.0, 1.0, 1.0, 1.0), 1.2)

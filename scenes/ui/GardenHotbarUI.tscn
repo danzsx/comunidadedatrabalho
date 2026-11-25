@@ -1,0 +1,97 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/garden_hotbar_ui.gd" id="1_hotbar_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wood_bar"]
+bg_color = Color(0.62, 0.44, 0.25, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.28, 0.18, 0.10, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_label_pill"]
+bg_color = Color(0.16, 0.14, 0.12, 0.88)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.74, 0.60, 0.36, 0.95)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="GardenHotbarUI" type="CanvasLayer"]
+layer = 35
+script = ExtResource("1_hotbar_script")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ToolLabelPanel" type="PanelContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -126.0
+offset_top = -56.0
+offset_right = 126.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_label_pill")
+
+[node name="Margin" type="MarginContainer" parent="Root/ToolLabelPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 1
+
+[node name="ToolLabel" type="Label" parent="Root/ToolLabelPanel/Margin"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.94, 0.82, 1)
+theme_override_font_sizes/font_size = 8
+text = "[1] Regador"
+horizontal_alignment = 1
+
+[node name="HotbarPanel" type="PanelContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -108.0
+offset_top = -38.0
+offset_right = 108.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_wood_bar")
+
+[node name="Margin" type="MarginContainer" parent="Root/HotbarPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 3
+
+[node name="SlotsHBox" type="HBoxContainer" parent="Root/HotbarPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1

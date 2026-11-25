@@ -12,24 +12,40 @@ var _dialogue_service: Node = null
 var _notebook_ui: Node = null
 var _project_ui: Node = null
 var _audio_feedback: Node = null
+var _inspection_ui: Node = null
+var _garden_board_ui: Node = null
 
 
 func _ready() -> void:
 	visible = false
 
 
-func bind_host(player: Node, dialogue_service: Node, notebook_ui: Node, project_ui: Node, audio_feedback: Node) -> void:
+func bind_host(
+	player: Node,
+	dialogue_service: Node,
+	notebook_ui: Node,
+	project_ui: Node,
+	audio_feedback: Node,
+	inspection_ui: Node = null,
+	garden_board_ui: Node = null
+) -> void:
 	_player = player
 	_dialogue_service = dialogue_service
 	_notebook_ui = notebook_ui
 	_project_ui = project_ui
 	_audio_feedback = audio_feedback
+	_inspection_ui = inspection_ui
+	_garden_board_ui = garden_board_ui
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed(&"ui_cancel"):
 		return
 	if _dialogue_service != null and bool(_dialogue_service.get("is_active")):
+		return
+	if _inspection_ui != null and bool(_inspection_ui.get("is_active")):
+		return
+	if _garden_board_ui != null and bool(_garden_board_ui.get("visible")):
 		return
 	if _notebook_ui != null and bool(_notebook_ui.get("visible")):
 		return

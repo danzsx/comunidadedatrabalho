@@ -33,7 +33,11 @@ static func recompute_npc_locations(world_state: Node, registry: Node) -> void:
 		var resolved_loc: String = String(ch.residence_id) if ch != null else ""
 		var resolved_marker: String = "spot_default"
 		var resolved_line: String = ""
-		if best != null:
+		if EnvironmentalInspectionService.is_npc_infected(world_state, npc_id):
+			resolved_loc = "loc_ubs"
+			resolved_marker = EnvironmentalInspectionService.get_ubs_spot_for_infected_npc(world_state, npc_id)
+			resolved_line = "Que febre e dor no corpo... vim me consultar na UBS."
+		elif best != null:
 			resolved_loc = String(best.location_id)
 			resolved_marker = String(best.marker_name)
 			resolved_line = best.ambient_line

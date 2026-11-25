@@ -69,6 +69,42 @@ static func mark_resident_listened(world_state: Node, event_bus: Node, family_id
 	_check_ready_to_report(world_state, event_bus, family_id)
 
 
+static func complete_home_visit(
+	world_state: Node,
+	event_bus: Node,
+	family_id: StringName,
+	npc_id: StringName,
+	approach: String,
+	summary: String,
+	highlights: Array[String] = []
+) -> Dictionary:
+	if world_state == null or family_id == &"":
+		return {}
+	var visits: Dictionary = world_state.get("field_visits") as Dictionary
+	if not visits.has(family_id):
+		assign_visit(world_state, event_bus, family_id, "Visita domiciliar — Família Alencar")
+	var visit: Dictionary = visits[family_id] as Dictionary
+	visit["listened"] = true
+	if approach == "empathetic" or approach == "supportive":
+		visit["respectful"] = true
+	elif approach == "rushed":
+		visit["respectful"] = false
+	if str(visit.get("stage", "")) == "assigned":
+		visit["stage"] = "observing"
+
+	var entry: Dictionary = HouseholdRecordService.record_completed_visit(
+		world_state,
+		event_bus,
+		family_id,
+		npc_id,
+		approach,
+		summary,
+		highlights
+	)
+	_check_ready_to_report(world_state, event_bus, family_id)
+	return entry
+
+
 static func submit_ubs_referral(world_state: Node, event_bus: Node, family_id: StringName, approach: StringName) -> void:
 	if world_state == null or family_id == &"":
 		return

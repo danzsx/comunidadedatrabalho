@@ -27,6 +27,8 @@ var completed_events: Array[StringName] = []
 var pending_events: Array[Dictionary] = []
 var career_trajectory: Dictionary = {}
 var unlocked_regions: Array[StringName] = []
+var environmental_state: Dictionary = {}
+var garden_state: Dictionary = {}
 
 
 func _ready() -> void:
@@ -61,6 +63,8 @@ func reset_to_new_game() -> void:
 		&"self_reflection": 0,
 	}
 	unlocked_regions = [&"reg_bairro_central"]
+	environmental_state = {}
+	garden_state = {}
 
 
 func set_fact(fact_id: StringName, value: Variant) -> void:
@@ -96,6 +100,8 @@ func to_dict() -> Dictionary:
 		"pending_events": pending_events.duplicate(true),
 		"career_trajectory": _stringify_keys(career_trajectory),
 		"unlocked_regions": _string_array(unlocked_regions),
+		"environmental_state": _stringify_keys(environmental_state),
+		"garden_state": _stringify_keys(garden_state),
 	}
 
 
@@ -139,6 +145,8 @@ func from_dict(data: Dictionary) -> void:
 	var loaded_regions: Array[StringName] = _to_string_name_array(data.get("unlocked_regions", ["reg_bairro_central"]))
 	if not loaded_regions.is_empty():
 		unlocked_regions = loaded_regions
+	environmental_state = _symbolize_keys(data.get("environmental_state", {}))
+	garden_state = _symbolize_keys(data.get("garden_state", {}))
 
 
 func _stringify_keys(source: Dictionary) -> Dictionary:

@@ -4,6 +4,7 @@ extends Area2D
 
 @export var target_location_id: StringName = &""
 @export var target_spawn_id: StringName = &"spawn_default"
+@export var require_door_interaction: bool = false
 
 
 func _ready() -> void:
@@ -14,9 +15,16 @@ func _ready() -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
+	if require_door_interaction:
+		return
+	if body != null and body.is_in_group(&"player"):
+		activate_portal()
+
+
+func activate_portal() -> void:
 	var router: Node = get_node_or_null("/root/SceneRouter")
 	if router != null and bool(router.get("is_transitioning")):
 		return
 	var bus: Node = get_node_or_null("/root/EventBus")
-	if bus != null and body != null and body.is_in_group(&"player") and target_location_id != &"":
+	if bus != null and target_location_id != &"":
 		bus.emit_signal(&"scene_change_requested", target_location_id, target_spawn_id)

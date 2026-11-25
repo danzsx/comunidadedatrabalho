@@ -8,6 +8,7 @@ const ITEMS_DIR: String = "res://data/items/"
 const ROUTINES_DIR: String = "res://data/routines/"
 const EVENTS_DIR: String = "res://data/events/"
 const PROJECTS_DIR: String = "res://data/projects/"
+const CROPS_DIR: String = "res://data/crops/"
 const DIALOGUES_DIR: String = "res://data/dialogues/"
 
 var locations: Dictionary = {}
@@ -17,6 +18,7 @@ var items: Dictionary = {}
 var routines: Dictionary = {}
 var events: Dictionary = {}
 var projects: Dictionary = {}
+var crops: Dictionary = {}
 var dialogue_paths: Dictionary = {}
 
 
@@ -32,6 +34,7 @@ func reload_all() -> void:
 	routines.clear()
 	events.clear()
 	projects.clear()
+	crops.clear()
 	dialogue_paths.clear()
 
 	_load_resources(LOCATIONS_DIR, locations, LocationData)
@@ -41,6 +44,7 @@ func reload_all() -> void:
 	_load_resources(ROUTINES_DIR, routines, RoutineEntry)
 	_load_resources(EVENTS_DIR, events, WorldEventData)
 	_load_resources(PROJECTS_DIR, projects, ProjectData)
+	_load_resources(CROPS_DIR, crops, CropData)
 	_load_dialogue_paths()
 
 
@@ -135,6 +139,18 @@ func get_all_project_ids() -> Array[StringName]:
 	return _keys_as_string_names(projects)
 
 
+func has_crop(crop_id: StringName) -> bool:
+	return crops.has(crop_id)
+
+
+func get_crop(crop_id: StringName) -> CropData:
+	return crops.get(crop_id, null) as CropData
+
+
+func get_all_crop_ids() -> Array[StringName]:
+	return _keys_as_string_names(crops)
+
+
 func has_dialogue(dialogue_id: StringName) -> bool:
 	return dialogue_paths.has(dialogue_id)
 
@@ -200,6 +216,16 @@ func validate_integrity() -> Array[String]:
 			for item_key: Variant in req_items.keys():
 				if not items.has(StringName(str(item_key))):
 					errors.append("Project '%s' references missing item '%s'" % [String(proj.id), str(item_key)])
+
+	for crop_key: Variant in crops.keys():
+		var crop: CropData = crops[crop_key] as CropData
+		if crop == null:
+			errors.append("Null CropData for key: %s" % str(crop_key))
+			continue
+		if crop.seed_item_id == &"" or not items.has(crop.seed_item_id):
+			errors.append("Crop '%s' references missing seed item '%s'" % [String(crop.id), String(crop.seed_item_id)])
+		if crop.produce_item_id == &"" or not items.has(crop.produce_item_id):
+			errors.append("Crop '%s' references missing produce item '%s'" % [String(crop.id), String(crop.produce_item_id)])
 
 	return errors
 

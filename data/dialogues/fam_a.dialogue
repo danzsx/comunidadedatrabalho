@@ -1,40 +1,184 @@
 ~ start
-if has_fact("fam_a_consequence_supportive"):
+if get_npc_availability("npc_a_2") == "at_ubs_dengue":
+	Dona Lúcia: Ai, Alex... essa febre e a dor no corpo não me deram trégua. Vim correndo para a UBS tomar soro.
+	Dona Lúcia: Se puder dar uma olhada no quintal lá de casa e na praça, eu te agradeço muito... tinha bastante mosquito esses dias.
+	Alex: Pode deixar comigo, Dona Lúcia. Descanse aqui que eu vou revisar os focos no bairro.
+	=> END
+
+if has_fact("fam_a_consequence_supportive") and not has_fact("fam_a_day5_acknowledged"):
 	Dona Lúcia: Alex, que bom te ver! A equipe da UBS passou aqui para organizar os horários das receitas e combinou uma rede de apoio com a vizinhança.
 	Dona Lúcia: Pela primeira vez em meses eu consegui respirar um pouco. Obrigada por ter reparado na nossa rotina sem julgar.
+	do set_fact("fam_a_day5_acknowledged", true)
+	do add_rel("npc_a_2", "affinity", 1)
+	do finish_home_visit("fam_a", "npc_a_2", "empathetic", "Retorno positivo: rede de apoio da UBS aliviou a sobrecarga da família.")
 	=> END
 
-if has_fact("fam_a_consequence_rushed"):
+if has_fact("fam_a_consequence_rushed") and not has_fact("fam_a_day5_acknowledged"):
 	Dona Lúcia: Olá, Alex. Recebemos um aviso frio da UBS... confesso que fiquei chateada, pareceu que a gente estava fazendo tudo errado.
-	Dona Lúcia: Se for passar por aqui de novo, espero que a gente consiga conversar de verdade, com mais calma.
-	=> END
-
-if get_visit_stage("fam_a") == "ready_to_report":
-	Dona Lúcia: Obrigada pela conversa, Alex. Quando falar com a Hortência lá na UBS, manda um abraço meu.
-	=> END
-
-if has_fact("met_fam_a"):
-	if get_clue_count("fam_a") >= 2:
-		Dona Lúcia: Reparei que você observou a casa com cuidado... a pilha de receitas, a umidade no corredor e o meu serviço acumulado.
-		- Não vim julgar nada, Dona Lúcia. Quero entender como a UBS pode ajudar a aliviar esse peso.
-			do mark_listened("fam_a", "npc_a_2", true)
-			Dona Lúcia: Que alívio ouvir isso... eu não dou conta de organizar os horários do meu pai e a costura sozinha. Pode anotar tudo no seu caderno.
-		- Só estou conferindo os pontos do protocolo para fechar o relatório hoje.
-			do mark_listened("fam_a", "npc_a_2", false)
-			Dona Lúcia: Entendi... anota o que precisar então. A gente vai se virando como sempre.
+	- Peço desculpas, Dona Lúcia. Quero recomeçar ouvindo vocês com calma hoje.
+		do set_fact("fam_a_day5_acknowledged", true)
+		do add_rel("npc_a_2", "trust", 2)
+		do record_visit_memory("fam_a", "repaired_trust", true)
+		Dona Lúcia: Obrigada por reconhecer isso, Alex. Vamos conversar direito então.
+		=> topicos_visita
+	- Entendo, vou anotar sua observação no registro.
+		do set_fact("fam_a_day5_acknowledged", true)
+		do finish_home_visit("fam_a", "npc_a_2", "rushed", "Retorno tenso após encaminhamento burocrático da UBS.")
 		=> END
-	Dona Lúcia: Oi, Alex. Fique à vontade para dar uma olhada na casa — às vezes as coisas do dia a dia explicam melhor do que eu consigo falar.
-	=> END
 
-Dona Lúcia: Pois não? Você é o rapaz novo que a Hortência comentou que ia passar pelo bairro?
-Alex: Sou sim, Alex. Estou começando na UBS agora e passando para conhecer as famílias.
-Dona Lúcia: Ah, que bom. Aqui em casa a rotina anda meio corrida cuidando do seu Antônio e das coisas do Pedro.
-- Se puder, gostaria de observar a casa com calma e ouvir como está o dia a dia de vocês.
+if get_visit_count("fam_a") == 0:
+	=> primeira_visita
+else:
+	=> visita_retorno
+
+~ primeira_visita
+if get_npc_availability("npc_a_2") == "busy_tired":
+	Dona Lúcia: Boa noite, Alex... desculpa a bagunça, o dia foi puxado cuidando do meu pai e correndo com as costuras.
+elif get_npc_availability("npc_a_2") == "out_at_plaza":
+	Dona Lúcia: Oi! Você é o Alex, o agente novo da UBS? Dei uma escapadinha rápida aqui na calçada pra tomar um ar.
+else:
+	Dona Lúcia: Pois não? Você é o rapaz novo que a Hortência comentou que ia passar aqui na casa da Família Alencar?
+Alex: Sou eu mesmo, Alex. Estou começando na UBS e vim fazer nossa primeira visita domiciliar.
+Dona Lúcia: Ah, entra... aqui a rotina anda corrida entre cuidar do seu Antônio, entregar costura e acompanhar o Pedro.
+- Vim sem pressa, Dona Lúcia. Quero ouvir como está o dia a dia de vocês e ver como podemos ajudar.
 	do set_fact("met_fam_a", true)
 	do mark_listened("fam_a", "npc_a_2", true)
-	Dona Lúcia: Obrigada, Alex. Só de alguém perguntar sem pressa já ajuda bastante. Pode reparar nos detalhes aqui da sala também.
-- Só vim fazer o registro rápido de apresentação mesmo.
+	do add_rel("npc_a_2", "affinity", 2)
+	do record_visit_memory("fam_a", "first_impression", "empathetic")
+	do inc_career("acs_engagement", 1)
+	Dona Lúcia: Que alívio ouvir isso... só de alguém perguntar sem pressa e sem julgar já tira um peso dos ombros.
+	=> topicos_visita
+- Quero entender os principais pontos da rotina aqui para registrar no caderno da UBS.
+	do set_fact("met_fam_a", true)
+	do mark_listened("fam_a", "npc_a_2", true)
+	do add_rel("npc_a_2", "cooperation", 1)
+	do record_visit_memory("fam_a", "first_impression", "practical")
+	Dona Lúcia: Certo, gosto de conversa clara. Vou te contar o que está mais apertado por aqui.
+	=> topicos_visita
+- Só preciso confirmar os dados básicos rápido para fechar meu expediente de hoje.
 	do set_fact("met_fam_a", true)
 	do mark_listened("fam_a", "npc_a_2", false)
-	Dona Lúcia: Tudo bem... quando a Hortência passar por aqui a gente conversa direito.
+	do add_rel("npc_a_2", "trust", -1)
+	do record_visit_memory("fam_a", "first_impression", "rushed")
+	do inc_career("academic_focus", 1)
+	Dona Lúcia: Entendi... quando a gente vira só formulário, dá até desânimo de abrir a porta.
+	- Desculpa, fui afobado. Pode me contar com calma o que mais preocupa vocês?
+		do add_rel("npc_a_2", "trust", 1)
+		do record_visit_memory("fam_a", "first_impression", "practical")
+		Dona Lúcia: Tudo bem, Alex... eu sei que começo de trabalho é corrido mesmo.
+		=> topicos_visita
+	- Obrigado, Dona Lúcia. Vou encerrar o registro inicial e volto outro dia.
+		do finish_home_visit("fam_a", "npc_a_2", "rushed", "Primeira visita apressada; Dona Lúcia ficou reservada.")
+		Dona Lúcia: Até logo, então. Quando puder conversar com calma, a porta continua aqui.
+		=> END
+
+~ topicos_visita
+if get_clue_count("fam_a") >= 2:
+	Dona Lúcia: Vi que você reparou bem nos detalhes da casa... as receitas na mesa, a umidade e a pilha de costuras. Sobre o que você quer conversar agora?
+else:
+	Dona Lúcia: O que você gostaria de acompanhar ou anotar sobre a nossa rotina aqui em casa?
+- Perguntar sobre a organização das receitas do Seu Antônio [if not has_visit_memory("fam_a", "discussed_meds")]
+	do record_visit_memory("fam_a", "discussed_meds", true)
+	do add_rel("npc_a_2", "trust", 1)
+	do add_rel("npc_a_2", "cooperation", 1)
+	do add_followup("fam_a", "followup_receitas", "Levar esquema simples para horários das receitas do Seu Antônio", 1)
+	Dona Lúcia: Nossa, Alex, essa é minha maior dor de cabeça. São tantos comprimidos que às vezes tenho medo de trocar o horário da tarde com o da noite.
+	Alex: Anotei como pendência no meu caderno. Vou preparar um quadro bem simples com a equipe da UBS e trago no retorno.
+	=> topicos_visita
+- Comentar sobre a umidade perto do quarto e o piso escorregadio [if not has_visit_memory("fam_a", "discussed_damp_wall")]
+	do record_visit_memory("fam_a", "discussed_damp_wall", true)
+	do add_rel("npc_a_2", "affinity", 1)
+	do add_followup("fam_a", "followup_umidade", "Acompanhar ventilação e risco de queda no corredor úmido", 2)
+	Dona Lúcia: Pois é... quando chove a parede mina água e eu fico com o coração na mão do seu Antônio escorregar indo ao banheiro.
+	Alex: Deixei registrado para acompanharmos juntos na próxima visita e pensar em soluções práticas de segurança.
+	=> topicos_visita
+- Ouvir como ela está lidando com a costura e os cuidados da casa [if not has_visit_memory("fam_a", "discussed_overload")]
+	do record_visit_memory("fam_a", "discussed_overload", true)
+	do add_rel("npc_a_2", "trust", 1)
+	do add_rel("npc_a_2", "affinity", 2)
+	do add_followup("fam_a", "followup_apoio", "Verificar rede de apoio para aliviar a sobrecarga da Dona Lúcia", 2)
+	Dona Lúcia: Faz meses que não sento dez minutos sem culpa... se eu paro a costura falta dinheiro, se eu me distraio o pai precisa de ajuda.
+	Alex: Obrigado por confiar em mim, Dona Lúcia. Cuidar de quem cuida também faz parte do nosso acompanhamento.
+	=> topicos_visita
+- Encerrar a visita e registrar tudo no Caderno de Campo
+	=> encerrar_visita
+
+~ visita_retorno
+if get_visit_memory("fam_a", "last_approach", "") == "rushed" and get_rel("npc_a_2", "trust") < 1:
+	Dona Lúcia: Olá, Alex. Na última vez você passou correndo... veio com um pouco mais de tempo hoje?
+	- Sim, Dona Lúcia. Peço desculpas pela pressa daquela vez — hoje vim para ouvir de verdade.
+		do add_rel("npc_a_2", "trust", 2)
+		do add_rel("npc_a_2", "affinity", 1)
+		do record_visit_memory("fam_a", "repaired_trust", true)
+		do record_visit_memory("fam_a", "last_approach", "empathetic")
+		Dona Lúcia: Assim é bem melhor, Alex. Fico feliz que você tenha voltado com calma.
+		=> menu_retorno
+	- Hoje também preciso ser objetivo, só vim checar se mudou algo.
+		do add_rel("npc_a_2", "trust", -1)
+		do finish_home_visit("fam_a", "npc_a_2", "rushed", "Retorno breve e distante; vínculo segue frio.")
+		Dona Lúcia: Está tudo igual por aqui, Alex. Até a próxima.
+		=> END
+elif get_rel("npc_a_2", "trust") >= 3:
+	Dona Lúcia: Alex! Que alegria te ver de volta aqui em casa. Já sinto bem mais tranquilidade conversando com você.
+	if has_visit_memory("fam_a", "discussed_meds"):
+		Dona Lúcia: Lembrei da nossa conversa anterior sobre os horários das receitas do seu Antônio.
+	elif has_visit_memory("fam_a", "discussed_overload"):
+		Dona Lúcia: Só de ter desabafado com você na outra visita já me fez bem.
+	=> menu_retorno
+else:
+	Dona Lúcia: Oi, Alex, bem-vindo de volta! Lembro do que conversamos na última visita. Como anda o movimento na UBS?
+	=> menu_retorno
+
+~ menu_retorno
+Dona Lúcia: Sobre o que você trouxe novidades hoje?
+- Entregar o quadro simples de horários das receitas do Seu Antônio [if has_pending_followup("fam_a", "followup_receitas")]
+	do resolve_followup("fam_a", "followup_receitas")
+	do add_rel("npc_a_2", "trust", 2)
+	do add_rel("npc_a_2", "cooperation", 2)
+	do inc_career("acs_engagement", 1)
+	Dona Lúcia: Nossa, ficou clarinho demais! Com as cores de manhã, tarde e noite até o Pedro consegue me ajudar a conferir.
+	do finish_home_visit("fam_a", "npc_a_2", "empathetic", "Retorno concluído: entregue quadro visual de horários das receitas do Seu Antônio.")
+	=> END
+- Conferir juntos a ventilação e o piso no corredor úmido [if has_pending_followup("fam_a", "followup_umidade")]
+	do resolve_followup("fam_a", "followup_umidade")
+	do add_rel("npc_a_2", "affinity", 2)
+	do add_rel("npc_a_2", "trust", 1)
+	Dona Lúcia: Seguindo sua dica, já colocamos um tapete antiderrapante e abrimos a janela cedo. Melhorou bastante!
+	do finish_home_visit("fam_a", "npc_a_2", "empathetic", "Retorno concluído: acompanhada prevenção de queda e ventilação no corredor.")
+	=> END
+- Perguntar como ela está se sentindo e conversar sobre rede de apoio [if has_pending_followup("fam_a", "followup_apoio")]
+	do resolve_followup("fam_a", "followup_apoio")
+	do add_rel("npc_a_2", "affinity", 2)
+	do add_rel("npc_a_2", "cooperation", 1)
+	Dona Lúcia: A Dona Rosa até se ofereceu para ficar meia hora com o pai quando eu preciso ir buscar linha. Saber que não estou sozinha muda tudo.
+	do finish_home_visit("fam_a", "npc_a_2", "empathetic", "Retorno concluído: acompanhada sobrecarga e articulação de apoio vizinho.")
+	=> END
+- Conversar sobre outros detalhes da rotina da casa [if not has_visit_memory("fam_a", "discussed_meds") or not has_visit_memory("fam_a", "discussed_damp_wall") or not has_visit_memory("fam_a", "discussed_overload")]
+	=> topicos_visita
+- Compartilhar hortaliças frescas da Horta Comunitária [if has_any_produce() and can_share_produce_today("npc_a_2")]
+	do share_best_produce_with("npc_a_2")
+	Dona Lúcia: Nossa, Alex, que presente maravilhoso! Verdura fresquinha assim faz toda diferença no almoço do seu Antônio e do Pedro. Muito obrigada!
+	=> END
+- Fazer um check-in breve e desejar uma boa semana
+	do add_rel("npc_a_2", "familiarity", 1)
+	do finish_home_visit("fam_a", "npc_a_2", "practical", "Visita de acompanhamento breve; rotina da família estável.")
+	Dona Lúcia: Obrigada por passar aqui, Alex. Quando precisar, a porta está aberta!
+	=> END
+
+~ encerrar_visita
+if has_visit_memory("fam_a", "discussed_meds") and has_visit_memory("fam_a", "discussed_overload"):
+	do finish_home_visit("fam_a", "npc_a_2", "empathetic", "Visita completa: escuta acolhedora sobre receitas do Seu Antônio e sobrecarga da Dona Lúcia.")
+	Dona Lúcia: Obrigada de coração, Alex. Fazia tempo que ninguém ouvia a gente com tanta atenção. Volta logo, viu?
+elif has_visit_memory("fam_a", "discussed_meds"):
+	do finish_home_visit("fam_a", "npc_a_2", "empathetic", "Visita registrada: levantada dificuldade nos horários das receitas do Seu Antônio.")
+	Dona Lúcia: Obrigada por anotar sobre as receitas, Alex. Vou aguardar seu retorno!
+elif has_visit_memory("fam_a", "discussed_damp_wall"):
+	do finish_home_visit("fam_a", "npc_a_2", "empathetic", "Visita registrada: observada umidade e risco de queda no corredor.")
+	Dona Lúcia: Muito obrigada pelo cuidado com a segurança do meu pai, Alex. Até a próxima visita!
+elif has_visit_memory("fam_a", "discussed_overload"):
+	do finish_home_visit("fam_a", "npc_a_2", "empathetic", "Visita registrada: escuta acolhedora sobre a sobrecarga de cuidados da Dona Lúcia.")
+	Dona Lúcia: Obrigada por me ouvir sem pressa, Alex. Volte quando puder!
+else:
+	do finish_home_visit("fam_a", "npc_a_2", "practical", "Visita de apresentação realizada com Dona Lúcia.")
+	Dona Lúcia: Obrigada pela visita, Alex. Se reparar em mais detalhes pela casa, pode anotar no seu caderno!
 => END

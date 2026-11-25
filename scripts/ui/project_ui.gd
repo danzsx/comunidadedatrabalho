@@ -28,6 +28,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"toggle_projects"):
 		if _dialogue_service != null and bool(_dialogue_service.get("is_active")):
 			return
+		for ui: Node in get_tree().get_nodes_in_group(&"environmental_inspection_ui"):
+			if bool(ui.get("is_active")):
+				return
 		toggle()
 		get_viewport().set_input_as_handled()
 	elif visible and event.is_action_pressed(&"ui_cancel"):

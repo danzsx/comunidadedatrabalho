@@ -122,6 +122,15 @@ position = Vector2(152, 88)
 [node name="spot_2" type="Marker2D" parent="NPCSpots"]
 position = Vector2(88, 136)
 
+[node name="spot_dengue_1" type="Marker2D" parent="NPCSpots"]
+position = Vector2(92, 152)
+
+[node name="spot_dengue_2" type="Marker2D" parent="NPCSpots"]
+position = Vector2(198, 152)
+
+[node name="spot_dengue_3" type="Marker2D" parent="NPCSpots"]
+position = Vector2(152, 140)
+
 [node name="InteriorArt" type="Sprite2D" parent="."]
 texture = ExtResource("6_hyjwf")
 centered = false
